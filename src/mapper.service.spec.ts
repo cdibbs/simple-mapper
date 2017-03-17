@@ -1,20 +1,25 @@
 /* tslint:disable:no-unused-variable */
-import { ClassProvider } from '@angular/core';
+import { ClassProvider, ValueProvider } from '@angular/core';
 import { TestBed, async, inject } from '@angular/core/testing';
-import { MapperService } from './mapper.service';
-import { LogServiceToken } from '.';
-import { BaseViewModel } from '../view-models';
-import { mappable, getMappableProperties } from '../decorators';
-import { MockLogService } from './mock';
 import { Observable } from 'rxjs';
+
+import { MapperService, MapperConfiguration} from './mapper.service';
+import { mappable, getMappableProperties } from './decorators/mappable.decorator';
+import * as vm from './test-resources/view-models';
+import { IConfig } from './i';
 
 describe('MapperService', () => {
   beforeEach(() => {
+    let config = <IConfig>{
+        logger: console,
+        viewModels: vm
+    };
+
     TestBed.configureTestingModule({
-      providers: [
-          MapperService,
-          <ClassProvider>{ provide: LogServiceToken, useClass: MockLogService }
-      ]
+        providers: [
+            MapperService,
+            <ValueProvider>{ provide: MapperConfiguration, useValue: config }
+        ]
     });
   });
 
@@ -23,8 +28,9 @@ describe('MapperService', () => {
   }));
 
   describe('MapJsonToVM', () =>  {
-    it('should map basic primities.', inject([MapperService], (mapper: MapperService) => {
-        class Mine extends BaseViewModel {
+    it('should map basic primitives.', inject([MapperService], (mapper: MapperService) => {
+        class Mine {
+            Id: number = 3;
             One: string = "string";
             Two: number = 3.14;
             Three: string = null;
@@ -35,7 +41,7 @@ describe('MapperService', () => {
             Two: 6.53,
             Three: "another"
         };
-        var result = mapper.MapJsonToVM(Mine, json);
+        var result = mapper.MapJsonToVM(vm.Mine, json);
         expect(result.Id).toBe(3);
         expect(result.One).toBe(json.One);
         expect(result.Two).toBe(json.Two);
@@ -45,48 +51,33 @@ describe('MapperService', () => {
     inject([MapperService], (mapper: MapperService) => {
         var warned = null;
         mapper["log"].warn = function(yep) { warned = yep; };
-        class Mine extends BaseViewModel {
-            One: string = "string";
-        }
         var json = {
             Id: 3,
             One: "something else",
             Two: 6.53, // ignored
         };
-        var result = mapper.MapJsonToVM(Mine, json, false);
+        var result = mapper.MapJsonToVM(vm.MineMinusTwo, json, false);
         expect(result.Id).toBe(3);
         expect(result.One).toBe(json.One);
         expect(result["Two"]).toBeUndefined();
         expect(warned).toBeNull();
     }));
-    it('should ignore extraneous source properties when unmappedWarning is false.',
+    it('should warn when extraneous source properties.',
     inject([MapperService], (mapper: MapperService) => {
         var warned = null;
         mapper["log"].warn = function(yep) { warned = yep; };
-        class Mine extends BaseViewModel {
-            One: string = "string";
-        }
         var json = {
             Id: 3,
             One: "something else",
             Two: 6.53, // ignored
         };
-        var result = mapper.MapJsonToVM(Mine, json);
+        var result = mapper.MapJsonToVM(vm.MineMinusTwo, json);
         expect(result.Id).toBe(3);
         expect(result.One).toBe(json.One);
         expect(result["Two"]).toBeUndefined();
         expect(warned).toBeTruthy();
     }));
     it('should map nested types.', inject([MapperService], (mapper: MapperService) => {
-        class MineTwo extends BaseViewModel {
-            Another: string = "for me";
-            get Computed(): string { return this.Another + " and me" };
-        }
-        class Mine extends BaseViewModel {
-            One: string = "string";
-            @mappable("MineTwo")
-            Prop: MineTwo = null;
-        }
         var json = {
             Id: 3,
             One: "something else",
@@ -94,7 +85,7 @@ describe('MapperService', () => {
                 Another: "for you"
             }
         };
-        var result = mapper.MapJsonToVM(Mine, json);
+        var result = mapper.MapJsonToVM(vm.Nested_Mine, json);
         expect(result.Id).toBe(3);
         expect(result.One).toBe(json.One);
         expect(result.Prop).toBeDefined();
@@ -103,15 +94,6 @@ describe('MapperService', () => {
     }));
 
     it('should map nested types under an observable.', inject([MapperService], (mapper: MapperService) => {
-        class MineTwo extends BaseViewModel {
-            Another: string = "for me";
-            get Computed(): string { return this.Another + " and me" };
-        }
-        class Mine extends BaseViewModel {
-            One: string = "string";
-            @mappable("MineTwo")
-            Prop: MineTwo = null;
-        }
         var json = {
             Id: 3,
             One: "something else",
@@ -120,7 +102,7 @@ describe('MapperService', () => {
             }
         };
         Observable.from([json]).delay(100).subscribe(j => {
-            var result = mapper.MapJsonToVM(Mine, json);
+            var result = mapper.MapJsonToVM(vm.Observable_Mine, json);
             expect(result.Id).toBe(3);
             expect(result.One).toBe(json.One);
             expect(result.Prop).toBeDefined();
@@ -129,15 +111,6 @@ describe('MapperService', () => {
         });
     }));
     it('should map nested array types.', inject([MapperService], (mapper: MapperService) => {
-        class MineTwo extends BaseViewModel {
-            Another: string = "for me";
-            get Computed(): string { return this.Another + " and me" };
-        }
-        class Mine extends BaseViewModel {
-            One: string = "string";
-            @mappable("MineTwo")
-            Props: MineTwo[] = null;
-        }
         var json = {
             Id: 3,
             One: "something else",
@@ -147,7 +120,7 @@ describe('MapperService', () => {
                 Another: "for me"
             }]
         };
-        var result = mapper.MapJsonToVM(Mine, json);
+        var result = mapper.MapJsonToVM(vm.NestedArrayTypes_Mine, json);
         expect(result.Id).toBe(3);
         expect(result.One).toBe(json.One);
         expect(result.Props).toBeDefined();

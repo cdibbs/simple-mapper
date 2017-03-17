@@ -1,72 +1,74 @@
-# simple-mapper
+![Travis Status](https://travis-ci.org/cdibbs/simple-mapper.svg?branch=master)
 
-## Installation
+# SimpleMapper
+SimpleMapper provides object-to-object mapping. It can be used to map objects of any type, though the original intention was to provide
+a way to recursively map simple JSON objects into nested view models (thereby gaining the benefit of any view model methods, etc).
 
-To install this library, run:
-
-```bash
-$ npm install simple-mapper --save
-```
-
-## Consuming your library
-
-Once you have published your library to npm, you can import your library in any Angular application by running:
-
-```bash
-$ npm install simple-mapper
-```
-
-and then from your Angular `AppModule`:
+# Setup
 
 ```typescript
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
-import { AppComponent } from './app.component';
-
-// Import your library
-import { SampleModule } from 'simple-mapper';
+// ...
+import { SimpleMapper } from 'simple-mapper';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-
-    // Specify your library as an import
-    LibraryModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        // ...
+    ],
+    imports: [
+        // ...
+        SimpleMapper.forRoot(config)
+    ]
 })
-export class AppModule { }
+export class AppModule {
+    constructor() {
 ```
 
-Once your library is imported, you can use its components, directives and pipes in your Angular application:
+# Usage
 
-```xml
-<!-- You can now use your library component in app.component.html -->
-<h1>
-  {{title}}
-</h1>
-<sampleComponent></sampleComponent>
+```typescript
+let myClassVm = mapper.MapJsonToVM(MyClass, { /* JSON object */ }, true);
+let myClassVmArray = mapper.MapJsonToVMArray(MyClass, [{ /* JSON object array */ }], false);
 ```
 
-## Development
+The optional third argument turns off warnings about missing destination properties.
 
-To generate all `*.js`, `*.js.map` and `*.d.ts` files:
+# View Models
 
-```bash
-$ npm run tsc
+Due to the way Typescript works (as of v2.2), you should define your view models so they always have default values. Otherwise, their properties
+will not be visible to the mapper:
+
+```typescript 
+export class MyWidget {
+    Id: number; /* not visible to the mapper. */
+    Name: string = null; /* visible due to null default. */
+    get Display(): string { 
+        return `${Name} (Id: ${Id})`;
+    }
+
+    @mappable("MyWidget")
+    Wiggy: MyWidget = null;
+}
 ```
 
-To lint all `*.ts` files:
+If a source property exists while a destination doesn't, a warning will be issued by default. You can turn this off with:
 
-```bash
-$ npm run lint
+```typescript
+let json = {
+    Id: 314,
+    Name: "Chris",
+    ExtraProp: "Fidgeting with digits"
+};
+mapper.MapJsonToVM(MyWidget, json, false);
 ```
 
-## License
+## Build
 
-MIT © [Christopher R Dibbern](mailto:chris.dibbern@gmail.com)
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+
+## Running unit tests
+
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Further help
+
+To get more help on the `angular-cli` use `ng help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

@@ -1,13 +1,22 @@
 import { OpaqueToken, Inject, Injectable } from '@angular/core';
-import { IMapperService, ILogService } from './i';
+import { IMapperService, ILogService, IConfig } from './i';
 import { getMappableProperties } from './decorators/mappable.decorator';
+
+export let MapperServiceToken = new OpaqueToken("IMapperServiceToken");
+export let ViewModelCollection = new OpaqueToken("ViewModelCollection");
+export let LogService = new OpaqueToken("LogService");
+export let MapperConfiguration = new OpaqueToken("MapperConfiguration");
 
 @Injectable()
 export class MapperService implements IMapperService {
-    public constructor(
-        private viewModels: { [key: string]: any } = {},
-        private log: ILogService = console
-    ) { }
+    private viewModels: { [key: string]: any };
+    private log: ILogService;
+
+    public constructor(@Inject(MapperConfiguration) private config: IConfig)
+    {
+        this.viewModels = config.viewModels || {};
+        this.log = config.logger || console;
+    }
 
     /** Recursively maps JSON into a ViewModel. This is required in order to get the ViewModel's methods.
      * Typecasting is not sufficient. Uses @mappable attribute on destination ViewModel to determine
@@ -20,9 +29,14 @@ export class MapperService implements IMapperService {
      */
     public MapJsonToVM<T extends { [key: string]: any }>(t: { new (): T }, json: any, unmappedWarning = true): T {
         let vm = new t();
-        var tprops = getMappableProperties<T>(vm);
-        //console.log(tprops);
-        for(var prop of Object.keys(json || {})) {
+        let tprops = getMappableProperties<T>(vm);
+        let keys = Object.keys(json || {});
+
+        if (unmappedWarning && keys.length > Object.keys(tprops).length) {
+            this.log.warn(`Unmapped source properties: ` + keys.filter(k => Object.keys(tprops).indexOf(k) < 0).join(", "));
+        }
+
+        for(var prop of keys) {
             let desc = Object.getOwnPropertyDescriptor(vm, prop);
             if (!desc || !desc.writable)
                 continue;
@@ -42,9 +56,6 @@ export class MapperService implements IMapperService {
             }
             else if (typeof vm[prop] !== "undefined") {
                 vm[prop] = json[prop];
-            }
-            else if (unmappedWarning) {
-                this.log.warn(`Property ${prop} is not mapped. Are you missing a destination property, default value, or @mappable attribute?`);
             }
         }
 
@@ -67,14 +78,12 @@ export class MapperService implements IMapperService {
      * @return {T[]} The constructed view model array with all of its member properties mapped from the source json.
      * @example MapJsonToVM(UserViewModel, userJson);
      */
-    public MapJsonToVMArray<T>(t: { new (): T }, json: any[]): T[] {
+    public MapJsonToVMArray<T>(t: { new (): T }, json: any[], unmappedWarning = true): T[] {
         let arr = <T[]>[];
         for(var i=0; i<json.length; i++) {
-            arr.push(this.MapJsonToVM(t, json[i]));
+            arr.push(this.MapJsonToVM(t, json[i], unmappedWarning));
         }
 
         return arr;
     }
 }
-
-export let MapperServiceToken = new OpaqueToken("IMapperServiceToken");
