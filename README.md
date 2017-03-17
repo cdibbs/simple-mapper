@@ -1,4 +1,4 @@
-![Travis Status](https://travis-ci.org/cdibbs/simple-mapper.svg?branch=master)
+[![Build Status](https://travis-ci.org/cdibbs/simple-mapper.svg?branch=master)](https://travis-ci.org/cdibbs/simple-mapper)
 
 # SimpleMapper
 SimpleMapper provides object-to-object mapping. It can be used to map objects of any type, though the original intention was to provide
