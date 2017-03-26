@@ -1,6 +1,6 @@
 {
   "angularCompilerOptions": {
-    "entryModule": "index#SimpleMapperModule"
+    "entryModule": "app/simple-mapper.module#SimpleMapperModule"
   },
   "compilerOptions": {
     "sourceMap": true,

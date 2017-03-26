@@ -4,8 +4,8 @@ import { TestBed, async, inject } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 
 import { MapperService, MapperConfiguration} from './mapper.service';
-import { mappable, getMappableProperties } from './decorators/mappable.decorator';
-import * as vm from './test-resources/view-models';
+import { mappable, getMappableProperties } from '../decorators/mappable.decorator';
+import * as vm from '../test-resources/view-models';
 import { IConfig } from './i';
 
 describe('MapperService', () => {
@@ -14,7 +14,6 @@ describe('MapperService', () => {
         logger: console,
         viewModels: vm
     };
-
     TestBed.configureTestingModule({
         providers: [
             MapperService,
