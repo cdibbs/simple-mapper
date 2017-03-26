@@ -1,7 +1,7 @@
 
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MapperService, MapperConfiguration } from './services/mapper.service';
+import { MapperService, MapperServiceToken, MapperConfiguration } from './services/mapper.service';
 import { IConfig } from './services/i';
 
 export * from './services/mapper.service';
@@ -12,11 +12,8 @@ export * from './decorators/mappable.decorator';
   imports: [
     CommonModule
   ],
-  declarations: [
-    MapperService
-  ],
-  exports: [
-  ]
+  declarations: [],
+  exports: []
 })
 export class SimpleMapperModule {
   static forRoot(config: IConfig): ModuleWithProviders {
@@ -24,6 +21,7 @@ export class SimpleMapperModule {
       ngModule: SimpleMapperModule,
       providers: [
         MapperService,
+        { provide: MapperServiceToken, useClass: MapperService },
         { provide: MapperConfiguration, useValue: config }
       ]
     };

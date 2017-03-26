@@ -1,11 +1,11 @@
-import { OpaqueToken, Inject, Injectable } from '@angular/core';
+import { InjectionToken, Inject, Injectable } from '@angular/core';
 import { IMapperService, ILogService, IConfig } from './i';
 import { getMappableProperties } from '../decorators/mappable.decorator';
 
-export let MapperServiceToken = new OpaqueToken("IMapperServiceToken");
-export let ViewModelCollection = new OpaqueToken("ViewModelCollection");
-export let LogService = new OpaqueToken("LogService");
-export let MapperConfiguration = new OpaqueToken("MapperConfiguration");
+export let MapperServiceToken = new InjectionToken<IMapperService>("IMapperServiceToken");
+export let ViewModelCollection = new InjectionToken("ViewModelCollection");
+export let LogService = new InjectionToken<ILogService>("ILogService");
+export let MapperConfiguration = new InjectionToken<IConfig>("MapperConfiguration");
 
 @Injectable()
 export class MapperService implements IMapperService {
