@@ -1,8 +1,13 @@
 [![Build Status](https://travis-ci.org/cdibbs/simple-mapper.svg?branch=master)](https://travis-ci.org/cdibbs/simple-mapper)
 
 # SimpleMapper
-Angular 2+ SimpleMapper provides object-to-object mapping. It can be used to map objects of any type, though the original intention was to provide
-a way to recursively map simple JSON objects into nested view models (thereby gaining the benefit of any view model methods, etc).
+Angular 2+ SimpleMapper provides object-to-object mapping. It can be used to map objects of any type,
+though the original intention was to provide a way to recursively map simple JSON objects into nested
+view models (thereby gaining the benefit of any view model methods, etc).
+
+## What it is not
+SimpleMapper is not a full-fledge mapper in the way of, for example, .NET's Automapper. There are no
+mapping profiles, and options are limited.
 
 # Setup
 
@@ -10,13 +15,16 @@ a way to recursively map simple JSON objects into nested view models (thereby ga
 // ...
 import { SimpleMapper } from 'simple-mapper';
 
+// ...
+import * as vm from './view-models';
+
 @NgModule({
     declarations: [
         // ...
     ],
     imports: [
         // ...
-        SimpleMapper.forRoot(config)
+        SimpleMapper.forRoot({viewModels: vm, logger: console})
     ]
 })
 export class AppModule {
@@ -30,12 +38,11 @@ let myClassVm = mapper.MapJsonToVM(MyClass, { /* JSON object */ }, true);
 let myClassVmArray = mapper.MapJsonToVMArray(MyClass, [{ /* JSON object array */ }], false);
 ```
 
-The optional third argument turns off warnings about missing destination properties.
+The optional third argument turns on (default) or off warnings about missing destination properties.
 
 # View Models
-
-Due to the way Typescript works (as of v2.2), you should define your view models so they always have default values. Otherwise, their properties
-will not be visible to the mapper:
+Due to the way Typescript works (as of v2.2), you should define your view models so they always have
+default values. Otherwise, their properties will not be visible to the mapper:
 
 ```typescript 
 export class MyWidget {
@@ -50,7 +57,8 @@ export class MyWidget {
 }
 ```
 
-If a source property exists while a destination doesn't, a warning will be issued by default. You can turn this off with:
+If a source property exists while a destination does not, a warning will be issued by default.
+You can turn this off by providing a third parameter:
 
 ```typescript
 let json = {
