@@ -1,11 +1,11 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MapperService, MapperConfiguration } from './src/mapper.service';
-import { IConfig } from './src/i';
+import { MapperService, MapperConfiguration } from './services/mapper.service';
+import { IConfig } from './services/i';
 
-export * from './src/mapper.service';
-export * from './src/i';
-export * from './src/decorators/mappable.decorator';
+export * from './services/mapper.service';
+export * from './services/i';
+export * from './decorators/mappable.decorator';
 
 @NgModule({
   imports: [
