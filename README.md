@@ -9,7 +9,7 @@ view models (thereby gaining the benefit of any view model methods, etc).
 SimpleMapper is not a full-fledge mapper in the way of, for example, .NET's Automapper. There are no
 mapping profiles, and options are limited.
 
-# Usage
+## Usage
 
 ```typescript
 let myClassVm = mapper.MapJsonToVM(MyClass, { /* JSON object */ }, true);
@@ -18,7 +18,7 @@ let myClassVmArray = mapper.MapJsonToVMArray(MyClass, [{ /* JSON object array */
 
 The optional third argument turns on (default) or off warnings about missing destination properties.
 
-# View Models
+## View Models
 Due to the way Typescript works (as of v2.2), you should define your view models so they always have
 default values. Otherwise, their properties will not be visible to the mapper:
 
@@ -51,7 +51,7 @@ mapper.MapJsonToVM(MyWidget, json, false);
 
 Run `npm install --save-dev simple-mapper` inside of an Angular 4 project.
 
-# Setup
+## Setup
 Inside your application's app.module.ts file, make the following additions.
 
 ```typescript
