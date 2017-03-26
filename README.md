@@ -9,28 +9,6 @@ view models (thereby gaining the benefit of any view model methods, etc).
 SimpleMapper is not a full-fledge mapper in the way of, for example, .NET's Automapper. There are no
 mapping profiles, and options are limited.
 
-# Setup
-
-```typescript
-// ...
-import { SimpleMapper } from 'simple-mapper';
-
-// ...
-import * as vm from './view-models';
-
-@NgModule({
-    declarations: [
-        // ...
-    ],
-    imports: [
-        // ...
-        SimpleMapper.forRoot({viewModels: vm, logger: console})
-    ]
-})
-export class AppModule {
-    constructor() {
-```
-
 # Usage
 
 ```typescript
@@ -67,6 +45,33 @@ let json = {
     ExtraProp: "Fidgeting with digits"
 };
 mapper.MapJsonToVM(MyWidget, json, false);
+```
+
+## Installation
+
+Run `npm install --save-dev simple-mapper` inside of an Angular 4 project.
+
+# Setup
+Inside your application's app.module.ts file, make the following additions.
+
+```typescript
+// ...
+import { SimpleMapper } from 'simple-mapper';
+
+// ...
+import * as vm from './view-models';
+
+@NgModule({
+    declarations: [
+        // ...
+    ],
+    imports: [
+        // ...
+        SimpleMapper.forRoot({viewModels: vm, logger: console})
+    ]
+})
+export class AppModule {
+    constructor() {
 ```
 
 ## Build
