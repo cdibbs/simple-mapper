@@ -41,7 +41,7 @@ export class MapperService implements IMapperService {
             if (!desc || !desc.writable)
                 continue;
 
-            // If their is an explicit mappable, map no matter what.
+            // If there is an explicit mappable, map no matter what.
             if (typeof tprops[prop] === "string") {
                 if (! this.viewModels.hasOwnProperty(tprops[prop]))
                     this.log.warn(`View model ${tprops[prop]} does not exist. Did you type it correctly?`);

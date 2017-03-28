@@ -4,9 +4,7 @@
 [![devDependencies Status](https://david-dm.org/cdibbs/simple-mapper/dev-status.svg)](https://david-dm.org/cdibbs/simple-mapper?type=dev)
 
 # SimpleMapper
-Angular 4+ SimpleMapper provides object-to-object mapping. It can be used to map objects of any type,
-though the original intention was to provide a way to recursively map simple JSON objects into nested
-view models (thereby gaining the benefit of any view model methods, etc).
+SimpleMapper for Angular 2+ provides object-to-object mapping. The original intention was to provide a way to recursively map simple JSON objects into nested view models (thereby gaining the benefit of any view model methods, etc). However, it can be used to map objects of any type.
 
 ## What it is not
 SimpleMapper is not a full-fledge mapper in the way of, for example, .NET's Automapper. There are no
