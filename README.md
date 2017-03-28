@@ -2,6 +2,8 @@
 [![Build Status](https://travis-ci.org/cdibbs/simple-mapper.svg?branch=master)](https://travis-ci.org/cdibbs/simple-mapper)
 [![dependencies Status](https://david-dm.org/cdibbs/simple-mapper/status.svg)](https://david-dm.org/cdibbs/simple-mapper)
 [![devDependencies Status](https://david-dm.org/cdibbs/simple-mapper/dev-status.svg)](https://david-dm.org/cdibbs/simple-mapper?type=dev)
+[![codecov](https://codecov.io/gh/cdibbs/simple-mapper/branch/master/graph/badge.svg)](https://codecov.io/gh/cdibbs/simple-mapper)
+
 
 # SimpleMapper
 SimpleMapper for Angular 2+ provides object-to-object mapping. The original intention was to provide a way to recursively map simple JSON objects into nested view models (thereby gaining the benefit of any view model methods, etc). However, it can be used to map objects of any type.
