@@ -1,14 +1,18 @@
 {
   "name": "simple-mapper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
+  "repository": "https://github.com/cdibbs/simple-mapper",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "coverage": "ng test --code-coverage --single-run",
+    "postcoverage": "codecov -f coverage/*.json",
+    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
   },
   "private": false,
   "dependencies": {
@@ -27,19 +31,21 @@
   "devDependencies": {
     "@angular/cli": "^1.0.0",
     "@angular/compiler-cli": "^4.0.0",
-    "@types/jasmine": "2.5.38",
-    "@types/node": "^6.0.60",
+    "@types/jasmine": "^2.5.38",
+    "@types/node": "^6.0.68",
+    "codecov": "^2.1.0",
     "codelyzer": "~2.0.0",
+    "istanbul": "^0.4.5",
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",
-    "karma": "~1.4.1",
+    "karma": "^1.4.1",
     "karma-chrome-launcher": "~2.0.0",
     "karma-cli": "~1.0.1",
-    "karma-coverage-istanbul-reporter": "^0.2.0",
+    "karma-coverage-istanbul-reporter": "^0.2.3",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.1.0",
-    "ts-node": "~2.0.0",
+    "ts-node": "^2.0.0",
     "tslint": "~4.5.0",
     "typescript": "^2.2.1"
   }
