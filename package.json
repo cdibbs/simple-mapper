@@ -1,7 +1,7 @@
 {
   "name": "simple-mapper",
   "description": "Angular 2+ object-to-view-model mapper. Intended to facilitate working with JSON from web API endpoints.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "license": "MIT",
   "repository": "https://github.com/cdibbs/simple-mapper",
   "scripts": {
@@ -47,7 +47,7 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.1.0",
     "ts-node": "^3.0.2",
-    "tslint": "~4.5.0",
+    "tslint": "^5.0.0",
     "typescript": "^2.2.1"
   }
 }
