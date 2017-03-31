@@ -32,8 +32,11 @@ export class MapperService implements IMapperService {
         let tprops = getMappableProperties<T>(vm);
         let keys = Object.keys(json || {});
 
-        if (unmappedWarning && keys.length > Object.keys(tprops).length) {
-            this.log.warn(`Unmapped source properties: ` + keys.filter(k => Object.keys(tprops).indexOf(k) < 0).join(", "));
+        if (unmappedWarning) {
+            let t2props = Object.keys(vm);
+            let unmapped = keys.filter(k => Object.keys(tprops).indexOf(k) < 0 && t2props.indexOf(k) < 0);
+            if (unmapped.length)
+                this.log.warn(`Unmapped source properties: ` + unmapped.join(", "));
         }
 
         for(var prop of keys) {

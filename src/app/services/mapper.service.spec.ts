@@ -76,6 +76,20 @@ describe('MapperService', () => {
         expect(result["Two"]).toBeUndefined();
         expect(warned).toBeTruthy();
     }));
+    it('should not warn when not extraneous source properties.',
+    inject([MapperService], (mapper: MapperService) => {
+        var warned = null;
+        mapper["log"].warn = function(yep) { warned = yep; };
+        var json = {
+            Id: 3,
+            One: "something else",
+            Two: 6.53, // ignored
+        };
+        var result = mapper.MapJsonToVM(vm.Mine, json);
+        expect(result.Id).toBe(3);
+        expect(result.One).toBe(json.One);
+        expect(warned).toBeFalsy();
+    }));
     it('should map nested types.', inject([MapperService], (mapper: MapperService) => {
         var json = {
             Id: 3,
