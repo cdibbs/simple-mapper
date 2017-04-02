@@ -1,18 +1,28 @@
 import { URLSearchParams } from '@angular/http';
+import { MappableInfo } from './mappable-info';
 
-const mapMetadataKey = "its.appdev.map.decorator";
-export function mappable<T>(type: string)
+const mapMetadataKey = "us.dibbern.oss.map.decorator";
+type decoratorInput = { new(): any } | string;
+
+export function mappable(type: decoratorInput)
 {
-    return (target: Object, propertyKey: string | symbol) => {
-        let d = Reflect.get(target, mapMetadataKey) || {};
+    return function (target: Object, propertyKey: string | symbol) {
+        if (typeof type === "undefined") {
+            throw new Error(`Provided type for property "${propertyKey}" on "${target.constructor.name}" is undefined. Did you define the type before using it?`);
+        }
+        let d: { [propKey: string]: decoratorInput }
+            = Reflect.get(target, mapMetadataKey) || {};
         d[propertyKey] = type;
-        //console.log(target, mapMetadataKey, d, type);
         Reflect.set(target, mapMetadataKey, d);
     };
 }
 
-export function getMappableProperties<T>(target: Object)
-    : { [propKey : string]: string }
+export function getMappableProperties(target: Object)
+    : { [propKey : string]: decoratorInput }
 {
+    if (typeof target === 'function') {
+        target = target['prototype'];
+    }
+
     return Reflect.get(target, mapMetadataKey) || {};
 }

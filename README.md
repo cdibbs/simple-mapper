@@ -38,6 +38,21 @@ export class MyWidget {
 }
 ```
 
+If providing view names, then you must provide the view models collection during import (see [Setup](#Setup)). Alternatively, as of v1.1.0+, you can provide classes directly to the `@mappable`: 
+
+```typescript 
+export class MyWidget {
+    Id: number; /* not visible to the mapper. */
+    Name: string = null; /* visible due to null default. */
+    get Display(): string { 
+        return `${Name} (Id: ${Id})`;
+    }
+
+    @mappable(MyWidget)
+    Wiggy: MyWidget = null; 
+}
+```
+
 If a source property exists while a destination does not, a warning will be issued by default.
 You can turn this off by providing a third parameter:
 
@@ -53,6 +68,7 @@ mapper.MapJsonToVM(MyWidget, json, false);
 ## Installation
 
 Run `npm install --save-dev simple-mapper` inside of an Angular 4 project.
+
 
 ## Setup
 Inside your application's app.module.ts file, make the following additions.

@@ -31,6 +31,12 @@ export class Nested_Mine {
     Prop: Nested_MineTwo = null;
 }
 
+export class NestedTypo {
+    Id: number = 3;
+    @mappable("MySillyTypo")
+    Prop: Nested_MineTwo = null;
+}
+
 export class Observable_MineTwo {
     Id: number = 3;
     Another: string = "for me";
@@ -53,4 +59,21 @@ export class NestedArrayTypes_Mine {
     One: string = "string";
     @mappable("NestedArrayTypes_MineTwo")
     Props: NestedArrayTypes_MineTwo[] = null;
+}
+
+export class ByRefTwo {
+    Name: string = "";
+    get Calculated(): string { return this.Name + " else"; }
+}
+
+export class ByRefNested {
+    Id: number = 3;
+    @mappable(ByRefTwo)
+    Two: ByRefTwo = null;
+}
+
+export class ByRefNestedArray {
+    Id: number = 3;
+    @mappable(ByRefTwo)
+    Two: ByRefTwo[] = null;
 }

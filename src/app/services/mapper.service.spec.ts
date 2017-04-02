@@ -90,6 +90,19 @@ describe('MapperService', () => {
         expect(result.One).toBe(json.One);
         expect(warned).toBeFalsy();
     }));
+    it('should error when view model missing.',
+    inject([MapperService], (mapper: MapperService) => {
+        try {
+            var json = {
+                Id: 3,
+                Prop: "something"
+            };
+            var result = mapper.MapJsonToVM(vm.NestedTypo, json);
+            expect("").toBe("Should have thrown error before here");
+        } catch(err) {
+            expect(err).toBeTruthy();
+        }
+    }));
     it('should map nested types.', inject([MapperService], (mapper: MapperService) => {
         var json = {
             Id: 3,
@@ -105,8 +118,29 @@ describe('MapperService', () => {
         expect(result.Prop.Another).toBe(json.Prop.Another);
         expect(result.Prop.Computed).toBe("for you and me");
     }));
-
-    it('should map nested types under an observable.', inject([MapperService], (mapper: MapperService) => {
+    it('should map nested reference types.', inject([MapperService], (mapper: MapperService) => {
+        var json = {
+            Id: 3,
+            Two: { Name: "something" }
+        };
+        var result = mapper.MapJsonToVM(vm.ByRefNested, json);
+        expect(result.Id).toBe(3);
+        expect(result.Two).toBeDefined();
+        expect(result.Two.Name).toBe(json.Two.Name);
+        expect(result.Two.Calculated).toBe("something else");
+    }));
+    it('should map nested array reference types.', inject([MapperService], (mapper: MapperService) => {
+        var json = {
+            Id: 3,
+            Two: [{ Name: "something" }]
+        };
+        var result = mapper.MapJsonToVM(vm.ByRefNestedArray, json);
+        expect(result.Id).toBe(3);
+        expect(result.Two).toBeDefined();
+        expect(result.Two[0].Name).toBe(json.Two[0].Name);
+        expect(result.Two[0].Calculated).toBe("something else");
+    }));
+    it('should map nested types under an observable.', async(inject([MapperService], (mapper: MapperService) => {
         var json = {
             Id: 3,
             One: "something else",
@@ -122,7 +156,20 @@ describe('MapperService', () => {
             expect(result.Prop.Another).toBe(json.Prop.Another);
             expect(result.Prop.Computed).toBe("for you and me");
         });
-    }));
+    })));
+    it('should map nested reference types under an observable.', async(inject([MapperService], (mapper: MapperService) => {
+        var json = {
+            Id: 3,
+            Two: { Name: "something" },
+        };
+        Observable.from([json]).delay(100).subscribe(j => {
+            var result = mapper.MapJsonToVM(vm.ByRefNested, json);
+            expect(result.Id).toBe(3);
+            expect(result.Two).toBeTruthy();
+            expect(result.Two.Name).toBe("something");
+            expect(result.Two.Calculated).toBe("something else");
+        });
+    })));
     it('should map nested array types.', inject([MapperService], (mapper: MapperService) => {
         var json = {
             Id: 3,

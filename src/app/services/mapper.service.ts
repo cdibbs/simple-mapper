@@ -29,7 +29,7 @@ export class MapperService implements IMapperService {
      */
     public MapJsonToVM<T extends { [key: string]: any }>(t: { new (): T }, json: any, unmappedWarning = true): T {
         let vm = new t();
-        let tprops = getMappableProperties<T>(vm);
+        let tprops = getMappableProperties(vm);
         let keys = Object.keys(json || {});
 
         if (unmappedWarning) {
@@ -43,21 +43,28 @@ export class MapperService implements IMapperService {
             let desc = Object.getOwnPropertyDescriptor(vm, prop);
             if (!desc || !desc.writable)
                 continue;
-
             // If there is an explicit mappable, map no matter what.
             if (typeof tprops[prop] === "string") {
-                if (! this.viewModels.hasOwnProperty(tprops[prop]))
-                    this.log.warn(`View model ${tprops[prop]} does not exist. Did you type it correctly?`);
+                let p: string = <string>tprops[prop];
+                if (! this.viewModels.hasOwnProperty(p))
+                    throw new Error(`View model ${tprops[prop]} does not exist. Did you type it correctly?`);
                 // If either the source or destination is iterable,
                 // map as an iterable. This is not ideal, but neither
                 // is Typescript. :-P
                 if (this.iterable(vm, json, prop)) {
-                    vm[prop] = this.MapJsonToVMArray(this.viewModels[tprops[prop]], json[prop]);
+                    vm[prop] = this.MapJsonToVMArray(this.viewModels[p], json[prop]);
                 } else {
-                    vm[prop] = this.MapJsonToVM(this.viewModels[tprops[prop]], json[prop]);
+                    vm[prop] = this.MapJsonToVM(this.viewModels[p], json[prop]);
                 }
-            }
-            else if (typeof vm[prop] !== "undefined") {
+            } else if (typeof tprops[prop] === 'function') {
+
+                let p: { new(): any } = <{new():any}>tprops[prop];
+                if (this.iterable(vm, json, prop)) {
+                    vm[prop] = this.MapJsonToVMArray(p, json[prop]);
+                } else {
+                    vm[prop] = this.MapJsonToVM(p, json[prop]);
+                }
+            } else if (typeof vm[prop] !== "undefined") {
                 vm[prop] = json[prop];
             }
         }
