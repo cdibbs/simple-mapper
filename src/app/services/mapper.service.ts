@@ -11,11 +11,13 @@ export let MapperConfiguration = new InjectionToken<IConfig>("MapperConfiguratio
 export class MapperService implements IMapperService {
     private viewModels: { [key: string]: any };
     private log: ILogService;
+    private noUnmappedWarnings: boolean;
 
     public constructor(@Inject(MapperConfiguration) private config: IConfig)
     {
         this.viewModels = config.viewModels || {};
         this.log = config.logger || console;
+        this.noUnmappedWarnings = !!config.noUnmappedWarnings; 
         if (config.validateOnStartup) {
             this.validate();
         }
@@ -30,12 +32,12 @@ export class MapperService implements IMapperService {
      * @return {T} The constructed view model with all of its properties mapped from the source json.
      * @example MapJsonToVM(UserViewModel, userJson);
      */
-    public MapJsonToVM<T extends { [key: string]: any }>(t: { new (): T }, json: any, unmappedWarning = true): T {
+    public MapJsonToVM<T extends { [key: string]: any }>(t: { new (): T }, json: any, unmappedWarning = undefined): T {
         let vm = new t();
         let tprops = getMappableProperties(vm);
         let keys = Object.keys(json || {});
 
-        if (unmappedWarning) {
+        if (unmappedWarning === true || (unmappedWarning === undefined && ! this.noUnmappedWarnings)) {
             let t2props = Object.keys(vm);
             let unmapped = keys.filter(k => Object.keys(tprops).indexOf(k) < 0 && t2props.indexOf(k) < 0);
             if (unmapped.length)

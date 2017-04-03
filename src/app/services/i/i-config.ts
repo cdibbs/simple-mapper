@@ -9,4 +9,7 @@ export interface IConfig {
 
     /** Validate mapping configuration on startup. Default: false. */
     validateOnStartup?: boolean;
+
+    /** Turn off unmapped warnings globally. Can be overridden at the method level. */
+    noUnmappedWarnings?: boolean;
 }

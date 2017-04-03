@@ -120,12 +120,9 @@ describe('MapperService', () => {
             Two: 6.53, // ignored
         };
         var result = mapper.MapJsonToVM(vm.MineMinusTwo, json, false);
-        expect(result.Id).toBe(3);
-        expect(result.One).toBe(json.One);
-        expect(result["Two"]).toBeUndefined();
         expect(warned).toBeNull();
     }));
-    it('should warn when extraneous source properties.',
+    it('should warn when extraneous source properties, by default.',
     inject([MapperService], (mapper: MapperService) => {
         var warned = null;
         mapper["log"].warn = function(yep) { warned = yep; };
@@ -135,9 +132,45 @@ describe('MapperService', () => {
             Two: 6.53, // ignored
         };
         var result = mapper.MapJsonToVM(vm.MineMinusTwo, json);
-        expect(result.Id).toBe(3);
-        expect(result.One).toBe(json.One);
-        expect(result["Two"]).toBeUndefined();
+        expect(warned).toBeTruthy();
+    }));
+    it('should warn when extraneous source properties when global=off, method=on (overrides global).',
+    inject([MapperService], (mapper: MapperService) => {
+        var warned = null;
+        mapper["noUnmappedWarnings"] = true;
+        mapper["log"].warn = function(yep) { warned = yep; };
+        var json = {
+            Id: 3,
+            One: "something else",
+            Two: 6.53, // ignored
+        };
+        var result = mapper.MapJsonToVM(vm.MineMinusTwo, json, true);
+        expect(warned).toBeTruthy();
+    }));
+    it('should not warn when extraneous source properties when global=on, method=off (overrides global).',
+    inject([MapperService], (mapper: MapperService) => {
+        var warned = null;
+        mapper["noUnmappedWarnings"] = false;
+        mapper["log"].warn = function(yep) { warned = yep; };
+        var json = {
+            Id: 3,
+            One: "something else",
+            Two: 6.53, // ignored
+        };
+        var result = mapper.MapJsonToVM(vm.MineMinusTwo, json, false);
+        expect(warned).toBeFalsy();
+    }));
+    it('should warn when extraneous source properties when global=on, method=on (overrides global).',
+    inject([MapperService], (mapper: MapperService) => {
+        var warned = null;
+        mapper["noUnmappedWarnings"] = false;
+        mapper["log"].warn = function(yep) { warned = yep; };
+        var json = {
+            Id: 3,
+            One: "something else",
+            Two: 6.53, // ignored
+        };
+        var result = mapper.MapJsonToVM(vm.MineMinusTwo, json, true);
         expect(warned).toBeTruthy();
     }));
     it('should not warn when not extraneous source properties.',
