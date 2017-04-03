@@ -1,5 +1,4 @@
 import { URLSearchParams } from '@angular/http';
-import { MappableInfo } from './mappable-info';
 
 const mapMetadataKey = "us.dibbern.oss.map.decorator";
 type decoratorInput = { new(): any } | string;
