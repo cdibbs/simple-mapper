@@ -16,6 +16,9 @@ export class MapperService implements IMapperService {
     {
         this.viewModels = config.viewModels || {};
         this.log = config.logger || console;
+        if (config.validateOnStartup) {
+            this.validate();
+        }
     }
 
     /** Recursively maps JSON into a ViewModel. This is required in order to get the ViewModel's methods.
@@ -95,5 +98,21 @@ export class MapperService implements IMapperService {
         }
 
         return arr;
+    }
+
+    public validate(): void {
+        let errors: any[] = [];
+        for(var key in this.viewModels) {
+            let tprops = getMappableProperties(this.viewModels[key]);
+            for(var p in tprops) {
+                if (typeof tprops[p] === 'string' && !this.viewModels.hasOwnProperty(<string>tprops[p])) {
+                    errors.push(`${p} on ${key}: ${tprops[p]}`);
+                }
+            }
+        }
+        if (errors.length) {
+            let missing: string = errors.join('\n');
+            throw new Error(`Invalid configuration. The following view models are missing: ${missing}`);
+        }
     }
 }

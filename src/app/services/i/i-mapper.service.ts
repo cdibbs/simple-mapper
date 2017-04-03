@@ -21,4 +21,10 @@ export interface IMapperService {
      * @example MapJsonToVM(UserViewModel, userJson);
      */
     MapJsonToVMArray<T>(t: { new (): T }, json: any): T[];
+
+    /**
+     * Validates whether the configuration would produce valid mappings. Will error on, e.g.,
+     * a typoed @mappable("TypoedName").
+     */
+    validate(): void;
 }

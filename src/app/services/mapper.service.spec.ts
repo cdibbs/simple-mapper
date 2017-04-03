@@ -26,6 +26,70 @@ describe('MapperService', () => {
     expect(mapper).toBeTruthy();
   }));
 
+  it('should permit no config values (no throws).', () => {
+    let ms = new MapperService({});
+    expect(ms["log"]).toBeDefined();
+    expect(ms["viewModels"]).toBeTruthy();
+  });
+
+  it('should not validate by default.', () => {
+    let called: boolean = false;
+    class Mapper2 extends MapperService {
+        validate(): void {
+            called = true;
+        }
+    }
+
+    let m = new Mapper2({});
+    expect(called).toBeFalsy();    
+  });
+
+  it('should validate when provoked.', () => {
+    let called: boolean = false;
+    class Mapper2 extends MapperService {
+        validate(): void {
+            called = true;
+        }
+    }
+
+    let m = new Mapper2({ validateOnStartup: true });
+    expect(called).toBeTruthy();    
+  });
+
+  describe('validate', () => {
+    it("doesn't throw when @mappable names are valid.", inject([MapperService], (mapper: MapperService) => {
+        class Mine {
+            Id: number = 3;
+        }
+        class Mine2 {
+            Name: string = "";
+            @mappable("Mine")
+            Mine: Mine = null;
+        }
+        
+        mapper["viewModels"] = { "Mine": Mine, "Mine2": Mine2 };
+        mapper.validate();
+    }));
+    it("throws when a @mappable doesn't exist (typoes).", inject([MapperService], (mapper: MapperService) => {
+        class Mine {
+            Id: number = 3;
+        }
+        class Mine2 {
+            Name: string = "";
+            @mappable("ATypoFromMeToYou")
+            Mine: Mine = null;
+        }
+        
+        mapper["viewModels"] = { "Mine": Mine, "Mine2": Mine2 };
+        try {
+            mapper.validate();
+            expect("").toBe("Should have thrown an error.");
+        } catch (err) {
+            expect(err).toBeDefined();
+        }
+    }));
+  });
+
   describe('MapJsonToVM', () =>  {
     it('should map basic primitives.', inject([MapperService], (mapper: MapperService) => {
         class Mine {

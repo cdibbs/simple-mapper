@@ -64,13 +64,9 @@ describe('getMappableProperties', () => {
         expect(Object.keys(dict).length).toBe(0);
     }));
     it('should return a dictionary with one entry when class has one mappable.', inject([], () => {
-        console.log("Here first, but shouldn't be.");
-        console.log("Of interest", vm.Mine);
         let dict = getMappableProperties(vm.Mine);
-        console.log(dict);
         expect(dict).toBeDefined();
         expect(Object.keys(dict).length).toBe(1);
-        console.log(typeof dict["Prop"], typeof vm.UnheardOf);
         expect(dict["Prop"]).toBe(vm.UnheardOf);
     }));
     it('should not return other classes mappables.', inject([], () => {

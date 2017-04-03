@@ -1,9 +1,12 @@
 import { ILogService } from './i-log.service';
 
 export interface IConfig {
-    /** This defaults to console. */
+    /** A logger with a signature matching console. Defaults to console. */
     logger?: ILogService;
 
-    /** The dictionary of view models to use for recursive mapping. */
-    viewModels: { [key: string]: any };
+    /** The dictionary of view models to use for recursive mapping. Default: empty. */
+    viewModels?: { [key: string]: any };
+
+    /** Validate mapping configuration on startup. Default: false. */
+    validateOnStartup?: boolean;
 }
