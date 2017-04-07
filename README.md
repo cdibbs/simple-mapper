@@ -75,10 +75,7 @@ Inside your application's app.module.ts file, make the following additions.
 
 ```typescript
 // ...
-import { SimpleMapper } from 'simple-mapper';
-
-// ...
-import * as vm from './view-models';
+import { SimpleMapperModule } from 'simple-mapper';
 
 @NgModule({
     declarations: [
@@ -86,7 +83,7 @@ import * as vm from './view-models';
     ],
     imports: [
         // ...
-        SimpleMapper.forRoot({viewModels: vm, logger: console})
+        SimpleMapperModule.forRoot({logger: console})
     ]
 })
 export class AppModule {
