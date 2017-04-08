@@ -1,5 +1,5 @@
 import { InjectionToken, Inject, Injectable } from '@angular/core';
-import { IMapperService, ILogService, IConfig } from './i';
+import { IMapperService, ILogService, IConfig, LoggerToken } from './i';
 import { getMappableProperties } from '../decorators/mappable.decorator';
 
 export let MapperServiceToken = new InjectionToken<IMapperService>("IMapperServiceToken");
@@ -10,13 +10,14 @@ export let MapperConfiguration = new InjectionToken<IConfig>("MapperConfiguratio
 @Injectable()
 export class MapperService implements IMapperService {
     private viewModels: { [key: string]: any };
-    private log: ILogService;
     private noUnmappedWarnings: boolean;
 
-    public constructor(@Inject(MapperConfiguration) private config: IConfig)
+    public constructor(
+        @Inject(MapperConfiguration) private config: IConfig,
+        @Inject(LoggerToken) private log: ILogService
+    )
     {
         this.viewModels = config.viewModels || {};
-        this.log = config.logger || console;
         this.noUnmappedWarnings = !!config.noUnmappedWarnings; 
         if (config.validateOnStartup) {
             this.validate();
@@ -114,7 +115,7 @@ export class MapperService implements IMapperService {
         }
         if (errors.length) {
             let missing: string = errors.join('\n');
-            throw new Error(`Invalid configuration. The following view models are missing: ${missing}`);
+            throw new Error(`Invalid configuration. The following view models are missing:\n ${missing}`);
         }
     }
 }

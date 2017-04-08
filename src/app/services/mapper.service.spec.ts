@@ -3,22 +3,20 @@ import { ClassProvider, ValueProvider } from '@angular/core';
 import { TestBed, async, inject } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 
+import { SimpleMapperModule } from '../simple-mapper.module';
 import { MapperService, MapperConfiguration} from './mapper.service';
 import { mappable, getMappableProperties } from '../decorators/mappable.decorator';
 import * as vm from '../test-resources/view-models';
-import { IConfig } from './i';
+import { IConfig, MapperLoggerToken } from './i';
 
 describe('MapperService', () => {
   beforeEach(() => {
     let config = <IConfig>{
-        logger: console,
         viewModels: vm
     };
+    let providers = SimpleMapperModule.forRoot(config).providers;
     TestBed.configureTestingModule({
-        providers: [
-            MapperService,
-            <ValueProvider>{ provide: MapperConfiguration, useValue: config }
-        ]
+        providers: providers
     });
   });
 
@@ -27,7 +25,7 @@ describe('MapperService', () => {
   }));
 
   it('should permit no config values (no throws).', () => {
-    let ms = new MapperService({});
+    let ms = new MapperService({}, console);
     expect(ms["log"]).toBeDefined();
     expect(ms["viewModels"]).toBeTruthy();
   });
@@ -40,7 +38,7 @@ describe('MapperService', () => {
         }
     }
 
-    let m = new Mapper2({});
+    let m = new Mapper2({}, console);
     expect(called).toBeFalsy();    
   });
 
@@ -52,7 +50,7 @@ describe('MapperService', () => {
         }
     }
 
-    let m = new Mapper2({ validateOnStartup: true });
+    let m = new Mapper2({ validateOnStartup: true }, console);
     expect(called).toBeTruthy();    
   });
 

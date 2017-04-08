@@ -1,7 +1,7 @@
 {
   "name": "simple-mapper",
   "description": "Angular 2+ object-to-view-model mapper. Intended to facilitate working with JSON from web API endpoints.",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "license": "MIT",
   "repository": "https://github.com/cdibbs/simple-mapper",
   "scripts": {
