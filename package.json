@@ -34,7 +34,7 @@
     "@types/jasmine": "^2.5.38",
     "@types/node": "^7.0.12",
     "codecov": "^2.1.0",
-    "codelyzer": "~2.0.0",
+    "codelyzer": "~2.1.1",
     "istanbul": "^0.4.5",
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",
