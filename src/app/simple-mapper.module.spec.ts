@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 
 import { SimpleMapperModule } from './simple-mapper.module';
 import { MapperService, MapperConfiguration } from './services/mapper.service';
-import { mappable, getMappableProperties } from './decorators/mappable.decorator';
 import * as vm from './test-resources/view-models';
 import { IConfig, MapperLoggerToken } from './services/i';
 
