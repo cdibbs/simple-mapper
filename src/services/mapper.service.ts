@@ -1,5 +1,5 @@
 import { InjectionToken, Inject, Injectable } from '@angular/core';
-import { IMapperService, ILogService, IConfig, LoggerToken } from './i';
+import { IMapperService, ILogService, IConfig, MapperLoggerToken } from './i';
 import { getMappableProperties } from '../decorators/mappable.decorator';
 
 export let MapperServiceToken = new InjectionToken<IMapperService>("IMapperServiceToken");
@@ -14,7 +14,7 @@ export class MapperService implements IMapperService {
 
     public constructor(
         @Inject(MapperConfiguration) private config: IConfig,
-        @Inject(LoggerToken) private log: ILogService
+        @Inject(MapperLoggerToken) private log: ILogService
     )
     {
         this.viewModels = config.viewModels || {};

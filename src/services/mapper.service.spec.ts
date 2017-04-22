@@ -3,7 +3,7 @@ import { ClassProvider, ValueProvider } from '@angular/core';
 import { TestBed, async, inject } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 
-import { SimpleMapperModule } from '../simple-mapper.module';
+import { SimpleMapperModule } from '../modules/simple-mapper.module';
 import { MapperService, MapperConfiguration} from './mapper.service';
 import { mappable, getMappableProperties } from '../decorators/mappable.decorator';
 import * as vm from '../test-resources/view-models';

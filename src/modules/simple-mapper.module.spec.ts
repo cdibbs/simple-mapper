@@ -4,9 +4,9 @@ import { TestBed, async, inject } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 
 import { SimpleMapperModule } from './simple-mapper.module';
-import { MapperService, MapperConfiguration } from './services/mapper.service';
-import * as vm from './test-resources/view-models';
-import { IConfig, MapperLoggerToken } from './services/i';
+import { MapperService, MapperConfiguration } from '../services/mapper.service';
+import * as vm from '../test-resources/view-models';
+import { IConfig, MapperLoggerToken } from '../services/i';
 
 describe('SimpleMapperModule without user logger', () => {
     beforeEach(() => {
@@ -14,7 +14,6 @@ describe('SimpleMapperModule without user logger', () => {
             viewModels: vm
         };
         let providers = SimpleMapperModule.forRoot(config).providers
-        //providers.push({ provide: MapperLoggerToken, useValue: console })
         TestBed.configureTestingModule({
             providers: providers
         });

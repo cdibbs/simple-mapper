@@ -8,9 +8,6 @@ export class Mine {
 }
 
 export class MineTwo {
-    Id: number = 3;
-    Another: string = "for me";
-    get Computed(): string { return this.Another + " and me" };
 }
 
 export class MineMinusTwo {

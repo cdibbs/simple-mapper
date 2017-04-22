@@ -1,132 +1,72 @@
-[![npm version](https://badge.fury.io/js/simple-mapper.svg)](https://badge.fury.io/js/simple-mapper)
-[![Build Status](https://travis-ci.org/cdibbs/simple-mapper.svg?branch=master)](https://travis-ci.org/cdibbs/simple-mapper)
-[![dependencies Status](https://david-dm.org/cdibbs/simple-mapper/status.svg)](https://david-dm.org/cdibbs/simple-mapper)
-[![devDependencies Status](https://david-dm.org/cdibbs/simple-mapper/dev-status.svg)](https://david-dm.org/cdibbs/simple-mapper?type=dev)
-[![codecov](https://codecov.io/gh/cdibbs/simple-mapper/branch/master/graph/badge.svg)](https://codecov.io/gh/cdibbs/simple-mapper)
-
-
-# SimpleMapper
-SimpleMapper for Angular 2+ provides object-to-object mapping. The original intention was to provide a way to recursively map simple JSON objects into nested view models (thereby gaining the benefit of any view model methods, etc). However, it can be used to map objects of any type.
-
-## What it is not
-SimpleMapper is not a full-fledge mapper in the way of, for example, .NET's Automapper. There are no
-mapping profiles, and options are limited.
-
-## Usage
-
-```typescript
-let myClassVm = mapper.MapJsonToVM(MyClass, { /* JSON object */ }, true);
-let myClassVmArray = mapper.MapJsonToVMArray(MyClass, [{ /* JSON object array */ }], false);
-```
-
-The optional third argument turns on (default) or off warnings about missing destination properties.
-
-## View Models
-Due to the way Typescript works (as of v2.2), you should define your view models so they always have
-default values. Otherwise, their properties will not be visible to the mapper:
-
-```typescript 
-export class MyWidget {
-    Id: number; /* not visible to the mapper. */
-    Name: string = null; /* visible due to null default. */
-    get Display(): string { 
-        return `${Name} (Id: ${Id})`;
-    }
-
-    @mappable("MyWidget")
-    Wiggy: MyWidget = null;
-
-    @mappable(MyWidget)
-    Wig2: MyWidget = null;
-}
-```
-
-If providing view names, then you must provide the view models collection during import (see [Setup](#Setup)). Alternatively, as of v1.1.0+, you can provide classes directly to the `@mappable`: 
-
-```typescript 
-export class MyWidget {
-    Id: number; /* not visible to the mapper. */
-    Name: string = null; /* visible due to null default. */
-    get Display(): string { 
-        return `${Name} (Id: ${Id})`;
-    }
-
-    @mappable(MyWidget)
-    Wiggy: MyWidget = null; 
-}
-```
-
-If a source property exists while a destination does not, a warning will be issued by default.
-You can turn this off by providing a third parameter:
-
-```typescript
-let json = {
-    Id: 314,
-    Name: "Chris",
-    ExtraProp: "Fidgeting with digits"
-};
-mapper.MapJsonToVM(MyWidget, json, false);
-```
+# simple-mapper
 
 ## Installation
 
-Run `npm install --save-dev simple-mapper` inside of an Angular 4 project.
+To install this library, run:
 
+```bash
+$ npm install simple-mapper --save
+```
 
-## Setup
-Inside your application's app.module.ts file, make the following additions.
+## Consuming your library
+
+Once you have published your library to npm, you can import your library in any Angular application by running:
+
+```bash
+$ npm install simple-mapper
+```
+
+and then from your Angular `AppModule`:
 
 ```typescript
-// ...
-import { SimpleMapperModule, MapperLoggerToken } from 'simple-mapper';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+import { AppComponent } from './app.component';
+
+// Import your library
+import { SampleModule } from 'simple-mapper';
 
 @NgModule({
-    declarations: [
-        // ...
-    ],
-    providers: [
-        { provide: MapperLoggerToken, useValue: console /* or a logger matching console's sig */ }
-    ],
-    imports: [
-        // ...
-        SimpleMapperModule.forRoot({logger: console})
-    ]
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+
+    // Specify your library as an import
+    LibraryModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
 })
-export class AppModule {
-    constructor() {
+export class AppModule { }
 ```
 
-## Options
-```typescript
-let config: IConfig = {
-   /** Deprecated. A logger with a signature matching console. Defaults to console.
-    * Use MapperLoggerToken in your providers, instead.
-    */
-    logger: undefined,
+Once your library is imported, you can use its components, directives and pipes in your Angular application:
 
-    /** The dictionary of view models to use for recursive mapping. 
-      * Not needed if using object references in @mappable() instead of names.
-      * Default: empty. */
-    viewModels: {},
-
-    /** Validate mapping configuration on startup. (Do mappable names exist in view models?)
-     * Default: false.
-     */
-    validateOnStartup: false,
-
-    /** Turn off unmapped source property warnings globally. Can be overridden at the method level. */
-    noUnmappedWarnings: false
-}
+```xml
+<!-- You can now use your library component in app.component.html -->
+<h1>
+  {{title}}
+</h1>
+<sampleComponent></sampleComponent>
 ```
 
-## Build
+## Development
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+To generate all `*.js`, `*.d.ts` and `*.metadata.json` files:
 
-## Running unit tests
+```bash
+$ npm run build
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+To lint all `*.ts` files:
 
-## Further help
+```bash
+$ npm run lint
+```
 
-To get more help on the `angular-cli` use `ng help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## License
+
+MIT © [Chris Dibbern](mailto:chrisdibbern@gmail.com)
