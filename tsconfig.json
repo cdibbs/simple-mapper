@@ -13,9 +13,9 @@
     ],
     "skipLibCheck": true,
     
+    "Don't auto-discover @types/node, it results in a ///<reference in the .d.ts output": "",
     "types": [
       "@types/jasmine"
     ]
-  },
-  "Don't auto-discover @types/node, it results in a ///<reference in the .d.ts output": ""
+  }
 }

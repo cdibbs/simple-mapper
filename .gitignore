@@ -17,6 +17,9 @@ src/*.d.ts
 # VS Code
 .vscode/*
 
+# Vim
+*~
+
 # Windows
 Thumbs.db
 Desktop.ini
@@ -30,3 +33,7 @@ Desktop.ini
 
 # Build files
 dist/*
+
+# Coverage
+coverage/*
+

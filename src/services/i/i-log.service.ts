@@ -18,6 +18,5 @@ export interface ILogService {
   info(message?: any, ...optional: any[]): void;
 }
 
-
-export let SimpleMapperLoggerToken = new InjectionToken<ILogService>("ILogService_User");
-export let LoggerToken = new InjectionToken<ILogService>("ILogService");
+/** User-provided logger injection token. */
+export let MapperLoggerToken = new InjectionToken<ILogService>("ILogService_User");

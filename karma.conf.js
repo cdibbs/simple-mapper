@@ -1,62 +1,50 @@
-// Karma configuration file, see link for more information
-// https://karma-runner.github.io/0.13/config/configuration-file.html
-
 module.exports = function (config) {
-  config.set({
-    basePath: '',
-    frameworks: ['jasmine'],
-    plugins: [
-      require('karma-jasmine'),
-      require('karma-chrome-launcher'),
-      require('karma-jasmine-html-reporter'),
-      require('karma-webpack'),
-      require('karma-sourcemap-loader'),
-      require('karma-spec-reporter'),
-      require('karma-coverage-istanbul-reporter')
-    ],
-    client: {
-      clearContext: false // leave Jasmine Spec Runner output visible in browser
-    },
-    files: [
-      { pattern: 'src/test.ts', watched: false }
-    ],
-    // webpack
-    webpack: {
-      resolve: {
-        extensions: ['.ts', '.js']
-      },
-      module: {
-        rules: [
-          {
-            test: /\.ts/,
-            loaders: ['ts-loader'],
-            exclude: /node_modules/
-          }
+    config.set({
+        frameworks: ["jasmine", "karma-typescript"],
+        files: [
+            { pattern: "base.spec.ts" },
+            { pattern: "src/**/*.+(ts|html)" }
         ],
-        exprContextCritical: false
-      },
-      performance: { hints: false }
-    },
+        exclude: [
+            'src/index.ts'
+        ],
+        preprocessors: {
+            "**/*.ts": ["karma-typescript"]
+        },
+        client: {
+            clearContext: false // leave Jasmine Spec Runner output visible in browser
+        },
+        mime: {
+            'text/x-typescript': ['ts', 'tsx']
+        },
+        karmaTypescriptConfig: {
+            bundlerOptions: {
+                entrypoints: /\.spec\.ts$/,
+                transforms: [
+                    require("karma-typescript-angular2-transform")
+                ]
+            },
+            reports: {
+                json: {
+                    directory: "coverage",
+                    subdirectory: "chrome",
+                    filename: "coverage.json"
+                },
+                html: {
+                    directory: "coverage",
+                    subdirectory: "chrome",
+                },
+            },
+            compilerOptions: {
+                lib: ["ES2015", "DOM"]
+            },
+            coverageOptions: {
+                instrumentation: true
+            }
+        },
 
-    webpackServer: {
-      noInfo: true
-    },
-    preprocessors: {
-      'src/test.ts': ['webpack']
-    },
-    mime: {
-      'text/x-typescript': ['ts', 'tsx']
-    },
-    coverageIstanbulReporter: {
-      reports: ['html', 'lcovonly', 'json'],
-      fixWebpackSourcePaths: true
-    },
-    reporters: ['progress', 'kjhtml', 'spec'],
-    port: 9876,
-    colors: true,
-    logLevel: config.LOG_INFO,
-    autoWatch: true,
-    browsers: ['Chrome'],
-    singleRun: false
-  });
+        reporters: ["progress", "kjhtml", "karma-typescript"],
+        autoWatch: true,
+        browsers: ["Chrome"]
+    });
 };
