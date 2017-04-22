@@ -1,6 +1,6 @@
 {
   "name": "simple-mapper",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "Angular 2+ library.",
   "repository": {
     "type": "git",
@@ -37,8 +37,8 @@
   },
   "devDependencies": {
     "@angular/common": "^4.0.0",
-    "@angular/compiler": "^4.0.2",
-    "@angular/compiler-cli": "^4.0.0",
+    "@angular/compiler": "^4.0.3",
+    "@angular/compiler-cli": "^4.0.3",
     "@angular/core": "^4.0.2",
     "@angular/platform-browser": "^4.0.0",
     "@angular/platform-browser-dynamic": "^4.0.0",
