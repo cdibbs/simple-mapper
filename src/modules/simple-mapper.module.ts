@@ -4,10 +4,6 @@ import { CommonModule } from '@angular/common';
 import { MapperService, MapperServiceToken, MapperConfiguration } from '../services/mapper.service';
 import { IConfig, MapperLoggerToken } from '../services/i';
 
-export * from '../services/mapper.service';
-export * from '../services/i';
-export * from '../decorators/mappable.decorator';
-
 @NgModule({
   imports: [
     CommonModule

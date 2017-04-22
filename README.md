@@ -81,7 +81,7 @@ Inside your application's app.module.ts file, make the following additions.
 
 ```typescript
 // ...
-import { SimpleMapperModule, MapperLoggerToken } from 'simple-mapper';
+import { SimpleMapperModule, MapperLoggerToken, IConfig } from 'simple-mapper';
 
 @NgModule({
     declarations: [
@@ -92,7 +92,7 @@ import { SimpleMapperModule, MapperLoggerToken } from 'simple-mapper';
     ],
     imports: [
         // ...
-        SimpleMapperModule.forRoot({logger: console})
+        SimpleMapperModule.forRoot(<IConfig>{})
     ]
 })
 export class AppModule {
@@ -136,7 +136,8 @@ While running tests, code coverage will be available at ./coverage/chrome/html/i
 
 ## Documentation
 
-Run 'npm run compodoc-serve' to see auto-generated documentation and documentation coverage on port 8080.
+Run 'npm run compodoc' to generate documentation.
+Then run 'npm run compodoc-serve' to see auto-generated documentation and documentation coverage on port 8080.
 
 ## Further help
 
