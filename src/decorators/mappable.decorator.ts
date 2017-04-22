@@ -1,5 +1,3 @@
-import { URLSearchParams } from '@angular/http';
-
 const mapMetadataKey = "us.dibbern.oss.map.decorator";
 export type decoratorInput = { new(): any } | string;
 
