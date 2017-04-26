@@ -1,6 +1,6 @@
 {
   "name": "simple-mapper",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "description": "Angular 2+ library.",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
     "name": "Chris Dibbern",
     "email": "chrisdibbern@gmail.com"
   },
-  "main": "./bundles/simple-mapper.umd.js",
+  "main": "index.js",
   "module": "./modules/simple-mapper.es5.js",
   "es2015": "./modules/simple-mapper.js",
   "bugs": {
