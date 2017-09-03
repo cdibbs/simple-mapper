@@ -39,4 +39,6 @@ dist/*
 
 # Coverage
 coverage/*
+.nyc_output
+test
 

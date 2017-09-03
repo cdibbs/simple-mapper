@@ -1,24 +1,17 @@
-import { InjectionToken, Inject, Injectable } from '@angular/core';
-import { IMapperService, ILogService, IConfig, MapperLoggerToken } from './i';
-import { getMappableProperties } from '../decorators/mappable.decorator';
+import { IMapperService, ILogService, IConfig } from './i';
+import { getMappableProperties } from './mappable.decorator';
 
-export let MapperServiceToken = new InjectionToken<IMapperService>("IMapperServiceToken");
-export let ViewModelCollection = new InjectionToken("ViewModelCollection");
-export let LogService = new InjectionToken<ILogService>("ILogService");
-export let MapperConfiguration = new InjectionToken<IConfig>("MapperConfiguration");
-
-@Injectable()
 export class MapperService implements IMapperService {
     private viewModels: { [key: string]: any };
     private noUnmappedWarnings: boolean;
 
     public constructor(
-        @Inject(MapperConfiguration) private config: IConfig,
-        @Inject(MapperLoggerToken) private log: ILogService
+        private config: IConfig,
+        private log: ILogService
     )
     {
         this.viewModels = config.viewModels || {};
-        this.noUnmappedWarnings = !!config.noUnmappedWarnings; 
+        this.noUnmappedWarnings = !!config.noUnmappedWarnings;
         if (config.validateOnStartup) {
             this.validate();
         }
@@ -33,10 +26,14 @@ export class MapperService implements IMapperService {
      * @return {T} The constructed view model with all of its properties mapped from the source json.
      * @example MapJsonToVM(UserViewModel, userJson);
      */
-    public MapJsonToVM<T extends { [key: string]: any }>(t: { new (): T }, json: any, unmappedWarning = undefined): T {
+    public map<T extends { [key: string]: any }>(t: { new (): T }, json: any, unmappedWarning: boolean = undefined): T {
+        if (json === null || json === undefined) {
+            return json;
+        }
+        
         let vm = new t();
         let tprops = getMappableProperties(vm);
-        let keys = Object.keys(json || {});
+        let keys = Object.keys(json);
 
         if (unmappedWarning === true || (unmappedWarning === undefined && ! this.noUnmappedWarnings)) {
             let t2props = Object.keys(vm);
@@ -58,17 +55,17 @@ export class MapperService implements IMapperService {
                 // map as an iterable. This is not ideal, but neither
                 // is Typescript. :-P
                 if (this.iterable(vm, json, prop)) {
-                    vm[prop] = this.MapJsonToVMArray(this.viewModels[p], json[prop]);
+                    vm[prop] = this.mapArray(this.viewModels[p], json[prop]);
                 } else {
-                    vm[prop] = this.MapJsonToVM(this.viewModels[p], json[prop]);
+                    vm[prop] = this.map(this.viewModels[p], json[prop]);
                 }
             } else if (typeof tprops[prop] === 'function') {
 
                 let p: { new(): any } = <{new():any}>tprops[prop];
                 if (this.iterable(vm, json, prop)) {
-                    vm[prop] = this.MapJsonToVMArray(p, json[prop]);
+                    vm[prop] = this.mapArray(p, json[prop]);
                 } else {
-                    vm[prop] = this.MapJsonToVM(p, json[prop]);
+                    vm[prop] = this.map(p, json[prop]);
                 }
             } else if (typeof vm[prop] !== "undefined") {
                 vm[prop] = json[prop];
@@ -85,19 +82,19 @@ export class MapperService implements IMapperService {
     }
 
     /**
-     * Recursively maps a JSON array to a ViewModel array. This is required in order to get the ViewModel's
-     * methods. Typecasting is not sufficient. Uses @mappable attribute on destination ViewModel to determine
-     * whether and how to map related ViewModels.
-     * @param {instantiable} t The constructable destination view model.
+     * Recursively maps a JSON array to a model array. This is required in order to use the model's
+     * methods. Typecasting is not sufficient. Uses @mappable attribute on destination model to determine
+     * whether and how to map nested models.
+     * @param {instantiable} t The constructable destination model.
      * @param {any[]} json The source JSON array.
      * @param {boolean} unmappedWarning Whether to warn if a destination property does not exist. Default: true.
-     * @return {T[]} The constructed view model array with all of its member properties mapped from the source json.
-     * @example MapJsonToVM(UserViewModel, userJson);
+     * @return {T[]} The constructed model array with all of its member properties mapped from the source json.
+     * @example mapArray(UserModel, userJsonArray, false);
      */
-    public MapJsonToVMArray<T>(t: { new (): T }, json: any[], unmappedWarning = true): T[] {
+    public mapArray<T>(t: { new (): T }, json: any[], unmappedWarning = true): T[] {
         let arr = <T[]>[];
         for(var i=0; i<json.length; i++) {
-            arr.push(this.MapJsonToVM(t, json[i], unmappedWarning));
+            arr.push(this.map(t, json[i], unmappedWarning));
         }
 
         return arr;

@@ -4,14 +4,14 @@
 		"experimentalDecorators": true,
 		"lib": ["es2015", "dom"],
 		"module": "commonjs",
-		"target": "es5",
+		"target": "es6",
 		"noImplicitAny": true,
 		"suppressImplicitAnyIndexErrors": true,
 		"moduleResolution": "node",
 		"emitDecoratorMetadata": true,
-		"sourceMap": false,
+		"sourceMap": true,
 		"declaration": true,
-		"outDir": "dist",
+		"outDir": "test",
 		"removeComments": false,
 		"typeRoots": [
 			"node_modules/@types",
@@ -21,14 +21,12 @@
 			"@types/node"
 		]
 	},
-	"files": [
-		"src/index.ts"
-	],
 	"include": [
-		"src/lib/**/*.spec.ts"
+		"src/lib/**/*.spec.ts",
+		"src/e2e/**/*.e2e.ts"
 	],
 	"exclude": [
-		"node_modules",
-		"src/e2e/resources"
+		"src/e2e/resources",
+		"node_modules"
 	]
 }

@@ -1,4 +1,4 @@
-import { mappable } from '../decorators/mappable.decorator';
+import { mappable } from '../lib/mappable.decorator';
 
 export class Mine {
     Id: number = 3;
@@ -73,4 +73,18 @@ export class ByRefNestedArray {
     Id: number = 3;
     @mappable(ByRefTwo)
     Two: ByRefTwo[] = null;
+}
+
+export class ValidateTestClass {
+    Id: number = 3;
+}
+export class ValidateTestClass2 {
+    Name: string = "";
+    @mappable("ValidateTestClass")
+    Mine: Mine = null;
+}
+export class InvalidValidateTestClass {
+    Name: string = "";
+    @mappable("ABogusReferenceFromMeToYou")
+    Mine: Mine = null;
 }
