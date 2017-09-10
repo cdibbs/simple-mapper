@@ -1,7 +1,7 @@
 {
   "name": "simple-mapper",
   "version": "1.4.7-beta",
-  "description": "Angular 2+ library.",
+  "description": "A convention-based mapping library for nodejs and the browser.",
   "keywords": [],
   "contributors": [],
   "homepage": "https://github.com/cdibbs/simple-mapper",
@@ -14,22 +14,24 @@
     "name": "Chris Dibbern",
     "email": "chrisdibbern@gmail.com"
   },
-  "main": "index.js",
+  "bundle": "./dist/bundles/typed-storage.es5.js",
+  "main": "./dist/index.js",
   "bugs": {
     "url": "https://github.com/cdibbs/simple-mapper/issues"
   },
   "license": "MIT",
   "scripts": {
-    "pretest": "tsc --project tsconfig-mocha.json",
+    "pretest": "tsc --project tsconfig-test.json",
     "test": "alsatian test/lib/*.spec.js",
     "cover": "nyc npm test",
+    "compodoc": "compodoc -p tsconfig.json",
     "e2e": "",
     "build": "npm-run-all tsc webpack",
     "webpack": "webpack",
     "tsc": "tsc",
     "report_coverage": "nyc report --reporter=lcov && codecov"
   },
-  "typings": "./index.d.ts",
+  "typings": "./dist/index.d.ts",
   "private": false,
   "dependencies": {},
   "devDependencies": {
@@ -70,7 +72,6 @@
     ],
     "require": [
       "source-map-support/register"
-    ],
-    "all": true
+    ]
   }
 }

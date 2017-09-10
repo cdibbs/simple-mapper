@@ -12,17 +12,24 @@ export class MapperServiceConstructorTests {
     @Test("should create.")
     public shouldCreate(): void {
         let config = <IConfig>{
-            viewModels: vm
+            models: vm
         };
         let ms = new MapperService(config, console);
         Expect(ms).not.toBe(null);
+    }
+
+    @Test("should permit empty constructor")
+    public shouldPermitEmptyConstructor() {
+        let ms = new MapperService();
+        Expect(ms["config"]).toEqual({});
+        Expect(ms["log"]).toBe(console);
     }
 
     @Test('should permit no config values (no throws).')
     public shouldPermitEmptyConfig(): void {
         let ms = new MapperService({}, console);
         Expect(ms["log"]).toBeDefined();
-        Expect(ms["viewModels"]).toBeTruthy();
+        Expect(ms["models"]).toBeTruthy();
     }
 
     @TestCase({}, false)
@@ -54,7 +61,7 @@ export class MapperService_MethodTests {
     @Test("validate throws only when invalid.")
     public throwsOnlyWhenInvalid(testClass: new () => any, throws: boolean): void {
         let mapper = new MapperService({}, console);
-        mapper["viewModels"] = { "ValidateTestClass": vm.ValidateTestClass, "Mine2": testClass };
+        mapper["models"] = { "ValidateTestClass": vm.ValidateTestClass, "Mine2": testClass };
         try {
             mapper.validate();
             Expect(false).toBe(throws);
@@ -145,7 +152,7 @@ export class MapperService_MethodTests {
                 Another: "for you"
             }
         };
-        let mapper = new MapperService({ viewModels: vm }, this.dummyConsole);
+        let mapper = new MapperService({ models: vm }, this.dummyConsole);
         var result = mapper.map(vm.Nested_Mine, json);
         Expect(result.Id).toBe(3);
         Expect(result.One).toBe(json.One);
@@ -160,7 +167,7 @@ export class MapperService_MethodTests {
             Id: 3,
             Two: { Name: "something" }
         };
-        let mapper = new MapperService({ viewModels: vm }, this.dummyConsole);
+        let mapper = new MapperService({ models: vm }, this.dummyConsole);
         var result = mapper.map(vm.ByRefNested, json);
         Expect(result.Id).toBe(3);
         Expect(result.Two).toBeDefined();
@@ -174,7 +181,7 @@ export class MapperService_MethodTests {
             Id: 3,
             Two: [{ Name: "something" }]
         };
-        let mapper = new MapperService({ viewModels: vm }, this.dummyConsole);
+        let mapper = new MapperService({ models: vm }, this.dummyConsole);
         var result = mapper.map(vm.ByRefNestedArray, json);
         Expect(result.Id).toBe(3);
         Expect(result.Two).toBeDefined();
@@ -193,7 +200,7 @@ export class MapperService_MethodTests {
                 Another: "for me"
             }]
         };
-        let mapper = new MapperService({ viewModels: vm }, this.dummyConsole);
+        let mapper = new MapperService({ models: vm }, this.dummyConsole);
         var result = mapper.map(vm.NestedArrayTypes_Mine, json);
         Expect(result.Id).toBe(3);
         Expect(result.One).toBe(json.One);
