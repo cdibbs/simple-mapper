@@ -9,7 +9,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [2.0.0] - 2017-09-13
 ### Added
 - CHANGELOG.md :-)
-- 
 
 ### Changed
 - Updated README.md to reflect removal of superfluous Angular dependency.
