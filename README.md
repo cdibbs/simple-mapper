@@ -80,7 +80,7 @@ let config = <IConfig> {
 
 // something like one of these...
 diContainer.bind<IMapperService>(MapperServiceToken).to(MapperService);
-diContainer.bind<IMapperService>(MapperServiceToken).to(() => new MapperService());
+diContainer.bind<IMapperService>(MapperServiceToken).to(() => new MapperService(config, console));
 ```
 
 ## Options

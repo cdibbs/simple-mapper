@@ -14,7 +14,7 @@
     "name": "Chris Dibbern",
     "email": "chrisdibbern@gmail.com"
   },
-  "bundle": "./dist/bundles/typed-storage.es5.js",
+  "bundle": "./dist/bundles/simple-mapper.es5.js",
   "main": "./dist/index.js",
   "bugs": {
     "url": "https://github.com/cdibbs/simple-mapper/issues"
