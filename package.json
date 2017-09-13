@@ -1,6 +1,6 @@
 {
   "name": "simple-mapper",
-  "version": "2.0.0-alpha",
+  "version": "2.0.0",
   "description": "A convention-based mapping library for nodejs and the browser.",
   "keywords": [],
   "contributors": [],
@@ -15,7 +15,8 @@
     "email": "chrisdibbern@gmail.com"
   },
   "bundle": "./dist/bundles/simple-mapper.es5.js",
-  "main": "./dist/index.js",
+  "main": "./dist/index",
+  "types": "./dist/index.d.ts",
   "bugs": {
     "url": "https://github.com/cdibbs/simple-mapper/issues"
   },
@@ -29,6 +30,7 @@
     "build": "npm-run-all tsc webpack",
     "webpack": "webpack",
     "tsc": "tsc",
+    "prepublish": "npm run build",
     "report_coverage": "nyc report --reporter=lcov && codecov"
   },
   "typings": "./dist/index.d.ts",

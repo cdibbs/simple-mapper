@@ -7,14 +7,9 @@
 
 # SimpleMapper
 SimpleMapper provides simple, object-to-object mapping by convention. It was created to solve
-the problem of recursively mapping JSON replies to models, in order to gain the benefits of
-their methods and default values. However, it can be used to map from Javascript objects of
-any type, to objects of any type.
-
-## What it is not
-SimpleMapper doesn't currently have the option of configuration-based mapping, in the way of
-a more full-fledge mapper such as .NET's Automapper. There are no mapping profiles, and options
-are limited. Hence the name SimpleMapper.
+the problem of recursively mapping JSON to models, in order to gain the benefits of those models,
+particularly their methods and default values. However, it can be used to map from Javascript
+objects of any type, to objects of any type.
 
 ## Usage
 
@@ -45,8 +40,8 @@ export class MyWidget {
 }
 ```
 
-If providing model names instead of references, then you must provide a model collection during import
-(see [Setup](#Setup)).
+If providing model names as strings instead of references, then you must provide a model collection
+during import (see [Setup](#Setup)).
 
 If a source property exists while a destination does not, a warning will be issued by default.
 You can turn this off by providing a third parameter:
@@ -57,29 +52,31 @@ let json = {
     Name: "Chris",
     ExtraProp: "Missing in the destination model, MyWidget."
 };
-mapper.MapJsonToVM(MyWidget, json, false);
+mapper.map(MyWidget, json, false);
 ```
 
 ## Installation
 
 `npm install --save-dev simple-mapper`
 
-
 ## Setup
 ```typescript
-// if you are using dependency injection...
+// if you are using dependency injection, your setup might look like this:
+
 import { MapperService, IMapperService, IConfig } from 'simple-mapper';
 import * as models from './models/barrel/';
 
 export let MapperServiceToken = new Symbol("MapperService");
+
+diContainer.bind<IMapperService>(MapperServiceToken).to(MapperService);
+
+// or with configuration...
+
 let config = <IConfig> {
     models: models,
     noUnmappedWarnings: true,
     validateOnStartup: true
 };
-
-// something like one of these...
-diContainer.bind<IMapperService>(MapperServiceToken).to(MapperService);
 diContainer.bind<IMapperService>(MapperServiceToken).to(() => new MapperService(config, console));
 ```
 
@@ -113,7 +110,7 @@ Code coverage will be available at ./coverage/index.html.
 
 ## Documentation
 
-Run 'npm run compodoc' to generate documentation.
+The scaffolding exists, but no real documentation, for the moment. Run 'npm run compodoc' to generate documentation.
 Then run 'npm run compodoc-serve' to see auto-generated documentation and documentation coverage on port 8080.
 
 ## Further help
