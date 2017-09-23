@@ -22,7 +22,10 @@ The optional third argument turns on (default) or off warnings about missing des
 
 ## Models
 Due to the way Typescript works (as of v2.2), you should define your models so they always have
-default values. Otherwise, their properties will not be visible to the mapper:
+default values. Otherwise, their properties will not be visible to the mapper.
+
+Be sure the default values for iterables are empty iterables (both in the source and destination),
+otherwise the properties will be mapped like ordinary properties.
 
 ```typescript 
 export class MyWidget {
@@ -36,7 +39,7 @@ export class MyWidget {
     Wiggy: MyWidget = null;
 
     @mappable(MyWidget)
-    Wig2: MyWidget = null;
+    WigArray: MyWidget[] = [];
 }
 ```
 

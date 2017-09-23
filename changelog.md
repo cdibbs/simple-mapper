@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.1.0] - 2017-09-23
+### Added
+- Tests to bring coverage to 100%.
+
+### Changed
+- Iterables mapped as such iff source and destination are iterable.
+- Updated documentation to discuss iterable default values.
+
 ## [2.0.0] - 2017-09-13
 ### Added
 - CHANGELOG.md :-)
