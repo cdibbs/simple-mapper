@@ -55,7 +55,7 @@ export class NestedArrayTypes_Mine {
     Id: number = 3;
     One: string = "string";
     @mappable("NestedArrayTypes_MineTwo")
-    Props: NestedArrayTypes_MineTwo[] = null;
+    Props: NestedArrayTypes_MineTwo[] = [];
 }
 
 export class ByRefTwo {
@@ -72,7 +72,7 @@ export class ByRefNested {
 export class ByRefNestedArray {
     Id: number = 3;
     @mappable(ByRefTwo)
-    Two: ByRefTwo[] = null;
+    Two: ByRefTwo[] = [];
 }
 
 export class ValidateTestClass {
@@ -87,4 +87,16 @@ export class InvalidValidateTestClass {
     Name: string = "";
     @mappable("ABogusReferenceFromMeToYou")
     Mine: Mine = null;
+}
+
+export class WeirdModel {
+    @mappable(Boolean)
+    bogus: Boolean = null;
+}
+
+export class Unwritable {
+    constructor() {
+        Object.freeze(this);
+    }
+    unwritableProp: string = "can't change this";
 }

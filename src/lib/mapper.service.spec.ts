@@ -209,107 +209,33 @@ export class MapperService_MethodTests {
         Expect(result.Props[0].Computed).toBe("for you and me");
         Expect(result.Props[1].Computed).toBe("for me and me");
     }
+
+    @TestCase(vm.ByRefNestedArray, "Two", { Two: {} }, false)
+    @TestCase(vm.ByRefNested, "Two", { Two: {} }, false)
+    @TestCase(vm.ByRefNestedArray, "Two",{ Two: [] }, true)
+    @TestCase(vm.ByRefNested, "Two", { Two: [] }, false)
+    @TestCase(vm.ByRefNestedArray, "Two", { Two: 234 }, false)
+    @TestCase(vm.ByRefNested, "Two", { Two: 234 }, false)
+    @TestCase(vm.ByRefNestedArray, "Two", { Two: "astring" }, true /* strings have iterators! */)
+    @TestCase(vm.ByRefNested, "Two", { Two: "astring" }, false)
+    @TestCase(vm.ByRefNestedArray, "Two", { Two: false }, false)
+    @TestCase(vm.ByRefNested, "Two", { Two: false }, false)
+    @Test("iterable correctly detects whether object is iterable.")
+    public iterable_trueIffIterable(t: { new(): any }, prop: string, obj: any, expected: boolean) {
+        let mapper = new MapperService();
+        let inst = new t();
+        Expect(mapper["iterable"](inst, obj, prop)).toBe(expected);
+    }
+
+    @Test("map should ignore errors in attribute.")
+    public map_TypoedAttribIgnored() {
+        let mapper = new MapperService();
+        Expect(mapper.map(vm.WeirdModel, { blarg: true })["blarg"]).not.toBeDefined();
+    }
+
+    @Test("map should ignore unwritable properties.")
+    public map_UnwritableIgnored() {
+        let mapper = new MapperService();
+        Expect(mapper.map(vm.Unwritable, { unwritableProp: "change" }).unwritableProp).toBe("can't change this");
+    }
 }
-/*
-  describe('MapJsonToVM', () =>  {
-    it('should error when view model missing.',
-    inject([MapperService], (mapper: MapperService) => {
-        try {
-            var json = {
-                Id: 3,
-                Prop: "something"
-            };
-            var result = mapper.MapJsonToVM(vm.NestedTypo, json);
-            expect("").toBe("Should have thrown error before here");
-        } catch(err) {
-            expect(err).toBeTruthy();
-        }
-    }));
-    it('should map nested types.', inject([MapperService], (mapper: MapperService) => {
-        var json = {
-            Id: 3,
-            One: "something else",
-            Prop: {
-                Another: "for you"
-            }
-        };
-        var result = mapper.MapJsonToVM(vm.Nested_Mine, json);
-        expect(result.Id).toBe(3);
-        expect(result.One).toBe(json.One);
-        expect(result.Prop).toBeDefined();
-        expect(result.Prop.Another).toBe(json.Prop.Another);
-        expect(result.Prop.Computed).toBe("for you and me");
-    }));
-    it('should map nested reference types.', inject([MapperService], (mapper: MapperService) => {
-        var json = {
-            Id: 3,
-            Two: { Name: "something" }
-        };
-        var result = mapper.MapJsonToVM(vm.ByRefNested, json);
-        expect(result.Id).toBe(3);
-        expect(result.Two).toBeDefined();
-        expect(result.Two.Name).toBe(json.Two.Name);
-        expect(result.Two.Calculated).toBe("something else");
-    }));
-    it('should map nested array reference types.', inject([MapperService], (mapper: MapperService) => {
-        var json = {
-            Id: 3,
-            Two: [{ Name: "something" }]
-        };
-        var result = mapper.MapJsonToVM(vm.ByRefNestedArray, json);
-        expect(result.Id).toBe(3);
-        expect(result.Two).toBeDefined();
-        expect(result.Two[0].Name).toBe(json.Two[0].Name);
-        expect(result.Two[0].Calculated).toBe("something else");
-    }));
-    it('should map nested types under an observable.', async(inject([MapperService], (mapper: MapperService) => {
-        var json = {
-            Id: 3,
-            One: "something else",
-            Prop: {
-                Another: "for you"
-            }
-        };
-        Observable.from([json]).delay(100).subscribe(j => {
-            var result = mapper.MapJsonToVM(vm.Observable_Mine, json);
-            expect(result.Id).toBe(3);
-            expect(result.One).toBe(json.One);
-            expect(result.Prop).toBeDefined();
-            expect(result.Prop.Another).toBe(json.Prop.Another);
-            expect(result.Prop.Computed).toBe("for you and me");
-        });
-    })));
-    it('should map nested reference types under an observable.', async(inject([MapperService], (mapper: MapperService) => {
-        var json = {
-            Id: 3,
-            Two: { Name: "something" },
-        };
-        Observable.from([json]).delay(100).subscribe(j => {
-            var result = mapper.MapJsonToVM(vm.ByRefNested, json);
-            expect(result.Id).toBe(3);
-            expect(result.Two).toBeTruthy();
-            expect(result.Two.Name).toBe("something");
-            expect(result.Two.Calculated).toBe("something else");
-        });
-    })));
-    it('should map nested array types.', inject([MapperService], (mapper: MapperService) => {
-        var json = {
-            Id: 3,
-            One: "something else",
-            Props: [{
-                Another: "for you"
-            }, {
-                Another: "for me"
-            }]
-        };
-        var result = mapper.MapJsonToVM(vm.NestedArrayTypes_Mine, json);
-        expect(result.Id).toBe(3);
-        expect(result.One).toBe(json.One);
-        expect(result.Props).toBeDefined();
-        expect(result.Props.length).toBe(2);
-        expect(result.Props[0].Computed).toBe("for you and me");
-        expect(result.Props[1].Computed).toBe("for me and me");
-    }));
-  });
-});
-*/
