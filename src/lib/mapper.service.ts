@@ -3,7 +3,7 @@ import { getMappableProperties } from './mappable.decorator';
 
 export class MapperService implements IMapperService {
     private models: { [key: string]: any };
-    private noUnmappedWarnings: boolean;
+    private unmappedWarnings: boolean;
 
     public constructor(
         private config: IConfig = {},
@@ -11,7 +11,7 @@ export class MapperService implements IMapperService {
     )
     {
         this.models = config.models || {};
-        this.noUnmappedWarnings = !!config.noUnmappedWarnings;
+        this.unmappedWarnings = typeof config.unmappedWarnings === "undefined" ? true : !!config.unmappedWarnings;
         if (config.validateOnStartup) {
             this.validate();
         }
@@ -26,7 +26,7 @@ export class MapperService implements IMapperService {
      * @return {T} The constructed view model with all of its properties mapped from the source object.
      * @example map(UserModel, userObj);
      */
-    public map<T extends { [key: string]: any }>(t: { new (): T }, obj: any, unmappedWarning: boolean = true): T {
+    public map<T extends { [key: string]: any }>(t: { new (): T }, obj: any, unmappedWarning: boolean = undefined): T {
         if (obj === null || obj === undefined) {
             return obj;
         }
@@ -35,7 +35,7 @@ export class MapperService implements IMapperService {
         let tprops = getMappableProperties(vm);
         let keys = Object.keys(obj);
 
-        if (unmappedWarning === true || (unmappedWarning === undefined && ! this.noUnmappedWarnings)) {
+        if (unmappedWarning === true || (unmappedWarning === undefined && this.unmappedWarnings)) {
             let t2props = Object.keys(vm);
             let unmapped = keys.filter(k => Object.keys(tprops).indexOf(k) < 0 && t2props.indexOf(k) < 0);
             if (unmapped.length)
@@ -93,7 +93,7 @@ export class MapperService implements IMapperService {
      * @return {T[]} The constructed model array with all of its member properties mapped from the source object.
      * @example mapArray(UserModel, userObjectArray, false);
      */
-    public mapArray<T>(t: { new (): T }, objArr: any[], unmappedWarning = true): T[] {
+    public mapArray<T>(t: { new (): T }, objArr: any[], unmappedWarning: boolean = undefined): T[] {
         let arr = <T[]>[];
         for(var i=0; i<objArr.length; i++) {
             arr.push(this.map(t, objArr[i], unmappedWarning));

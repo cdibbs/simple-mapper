@@ -77,7 +77,7 @@ diContainer.bind<IMapperService>(MapperServiceToken).to(MapperService);
 
 let config = <IConfig> {
     models: models,
-    noUnmappedWarnings: true,
+    unmappedWarnings: true,
     validateOnStartup: true
 };
 diContainer.bind<IMapperService>(MapperServiceToken).to(() => new MapperService(config, console));
@@ -97,7 +97,7 @@ let config: IConfig = {
     validateOnStartup: false,
 
     /** Turn off unmapped source property warnings globally. Can be overridden at the method level. */
-    noUnmappedWarnings: false
+    unmappedWarnings: false
 }
 ```
 

@@ -97,7 +97,7 @@ export class MapperService_MethodTests {
     @TestCase(true, true, true) // method setting overrides global setting
     @TestCase(false, false, false) // global setting does not override method setting
     @TestCase(undefined, undefined, true) // User never specified
-    @TestCase(false, undefined, true)
+    @TestCase(false, undefined, false)
     @TestCase(true, undefined, true)
     @TestCase(false, null, false)
     @TestCase(null, null, false) // Meh, they specified something falsy
@@ -108,7 +108,7 @@ export class MapperService_MethodTests {
         warnResult: boolean)
     {
         var warned = false;
-        let mapper = new MapperService({ noUnmappedWarnings: globalNoWarnPref }, this.dummyConsole);
+        let mapper = new MapperService({ unmappedWarnings: globalNoWarnPref }, this.dummyConsole);
         mapper["log"].warn = function(yep) { warned = true; };
         var json = {
             Id: 3,
@@ -124,18 +124,18 @@ export class MapperService_MethodTests {
     @TestCase(true, true, true) // method setting overrides global setting
     @TestCase(false, false, false) // global setting does not override method setting
     @TestCase(undefined, undefined, true) // User never specified
-    @TestCase(false, undefined, true)
+    @TestCase(false, undefined, false)
     @TestCase(true, undefined, true)
     @TestCase(false, null, false)
     @TestCase(null, null, false) // Meh, they specified something falsy
-    @Test('map should optionally warn of extraneous properties.')
+    @Test('mapArray should optionally warn of extraneous properties.')
     public mapArray_ExtraProps_WarnsWhenAppropriate(
         globalNoWarnPref: boolean,
         warnPref: boolean,
         warnResult: boolean)
     {
         var warned = false;
-        let mapper = new MapperService({ noUnmappedWarnings: globalNoWarnPref }, this.dummyConsole);
+        let mapper = new MapperService({ unmappedWarnings: globalNoWarnPref }, this.dummyConsole);
         mapper["log"].warn = function(yep) { warned = true; };
         var json = {
             Id: 3,

@@ -11,6 +11,6 @@ export interface IConfig {
      */
     validateOnStartup?: boolean;
 
-    /** Turn off unmapped source property warnings globally. Can be overridden at the method level. */
-    noUnmappedWarnings?: boolean;
+    /** Whether to issue unmapped property warnings. Can be overridden at the method level. */
+    unmappedWarnings?: boolean;
 }
