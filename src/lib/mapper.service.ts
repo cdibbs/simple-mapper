@@ -26,7 +26,7 @@ export class MapperService implements IMapperService {
      * @return {T} The constructed view model with all of its properties mapped from the source object.
      * @example map(UserModel, userObj);
      */
-    public map<T extends { [key: string]: any }>(t: { new (): T }, obj: any, unmappedWarning: boolean = undefined): T {
+    public map<T extends { [key: string]: any }>(t: { new (): T }, obj: any, unmappedWarning: boolean = true): T {
         if (obj === null || obj === undefined) {
             return obj;
         }

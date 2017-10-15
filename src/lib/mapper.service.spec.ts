@@ -98,7 +98,7 @@ export class MapperService_MethodTests {
     @TestCase(false, false, false) // global setting does not override method setting
     @TestCase(undefined, undefined, true) // User never specified
     @TestCase(false, undefined, true)
-    @TestCase(true, undefined, false)
+    @TestCase(true, undefined, true)
     @TestCase(false, null, false)
     @TestCase(null, null, false) // Meh, they specified something falsy
     @Test('map should optionally warn of extraneous properties.')
@@ -116,6 +116,33 @@ export class MapperService_MethodTests {
             Two: 6.53, // ignored
         };
         var result = mapper.map(vm.MineMinusTwo, json, warnPref);
+        Expect(warned).toBe(warnResult);
+    }
+
+    @TestCase(false, true, true)
+    @TestCase(true, false, false)
+    @TestCase(true, true, true) // method setting overrides global setting
+    @TestCase(false, false, false) // global setting does not override method setting
+    @TestCase(undefined, undefined, true) // User never specified
+    @TestCase(false, undefined, true)
+    @TestCase(true, undefined, true)
+    @TestCase(false, null, false)
+    @TestCase(null, null, false) // Meh, they specified something falsy
+    @Test('map should optionally warn of extraneous properties.')
+    public mapArray_ExtraProps_WarnsWhenAppropriate(
+        globalNoWarnPref: boolean,
+        warnPref: boolean,
+        warnResult: boolean)
+    {
+        var warned = false;
+        let mapper = new MapperService({ noUnmappedWarnings: globalNoWarnPref }, this.dummyConsole);
+        mapper["log"].warn = function(yep) { warned = true; };
+        var json = {
+            Id: 3,
+            One: "something else",
+            Two: 6.53, // ignored
+        };
+        var result = mapper.mapArray(vm.MineMinusTwo, [json], warnPref);
         Expect(warned).toBe(warnResult);
     }
 
