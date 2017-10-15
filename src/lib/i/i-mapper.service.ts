@@ -8,7 +8,7 @@ export interface IMapperService {
      * @return {T} The constructed view model with all of its properties mapped from the source object.
      * @example map(UserModel, userObj);
      */
-    map<T>(t: { new (): T }, json: any, unmappedWarning: boolean): T;
+    map<T>(t: { new (): T }, json: any, unmappedWarning?: boolean): T;
 
     /**
      * Recursively maps an object array to a model array. Uses @mappable attribute on destination model to determine
@@ -19,7 +19,7 @@ export interface IMapperService {
      * @return {T[]} The constructed model array with all of its member properties mapped from the source object.
      * @example mapArray(UserModel, userObjectArray, false);
      */
-    mapArray<T>(t: { new (): T }, json: any, unmappedWarning: boolean): T[];
+    mapArray<T>(t: { new (): T }, json: any, unmappedWarning?: boolean): T[];
 
     /**
      * Validates whether the configuration would produce valid mappings. Will error on, e.g.,
