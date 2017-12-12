@@ -1,8 +1,8 @@
 [![npm version](https://badge.fury.io/js/simple-mapper.svg)](https://badge.fury.io/js/simple-mapper)
-[![Build Status](https://travis-ci.org/cdibbs/simple-mapper.svg?branch=master)](https://travis-ci.org/cdibbs/simple-mapper)
-[![dependencies Status](https://david-dm.org/cdibbs/simple-mapper/status.svg)](https://david-dm.org/cdibbs/simple-mapper)
-[![devDependencies Status](https://david-dm.org/cdibbs/simple-mapper/dev-status.svg)](https://david-dm.org/cdibbs/simple-mapper?type=dev)
-[![codecov](https://codecov.io/gh/cdibbs/simple-mapper/branch/master/graph/badge.svg)](https://codecov.io/gh/cdibbs/simple-mapper)
+[![Build Status](https://travis-ci.org/ossplz/simple-mapper.svg?branch=master)](https://travis-ci.org/ossplz/simple-mapper)
+[![dependencies Status](https://david-dm.org/ossplz/simple-mapper/status.svg)](https://david-dm.org/ossplz/simple-mapper)
+[![devDependencies Status](https://david-dm.org/ossplz/simple-mapper/dev-status.svg)](https://david-dm.org/ossplz/simple-mapper?type=dev)
+[![codecov](https://codecov.io/gh/ossplz/simple-mapper/branch/master/graph/badge.svg)](https://codecov.io/gh/ossplz/simple-mapper)
 
 
 # SimpleMapper
