@@ -6,6 +6,8 @@
 
 
 # SimpleMapper
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/ossplz/simple-mapper.svg)](https://greenkeeper.io/)
 SimpleMapper provides simple, object-to-object mapping by convention. It was created to solve
 the problem of recursively mapping JSON to models, in order to gain the benefits of those models,
 particularly their methods and default values. However, it can be used to map from Javascript
