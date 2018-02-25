@@ -3,11 +3,10 @@
 [![dependencies Status](https://david-dm.org/ossplz/simple-mapper/status.svg)](https://david-dm.org/ossplz/simple-mapper)
 [![devDependencies Status](https://david-dm.org/ossplz/simple-mapper/dev-status.svg)](https://david-dm.org/ossplz/simple-mapper?type=dev)
 [![codecov](https://codecov.io/gh/ossplz/simple-mapper/branch/master/graph/badge.svg)](https://codecov.io/gh/ossplz/simple-mapper)
-
+[![Greenkeeper badge](https://badges.greenkeeper.io/ossplz/simple-mapper.svg)](https://greenkeeper.io/)
 
 # SimpleMapper
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/ossplz/simple-mapper.svg)](https://greenkeeper.io/)
 SimpleMapper provides simple, object-to-object mapping by convention. It was created to solve
 the problem of recursively mapping JSON to models, in order to gain the benefits of those models,
 particularly their methods and default values. However, it can be used to map from Javascript
