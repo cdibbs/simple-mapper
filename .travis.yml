@@ -4,6 +4,7 @@ dist: trusty
 
 node_js:
 - '6.9.4'
+- '10'
 
 script: 
   - npm run cover
