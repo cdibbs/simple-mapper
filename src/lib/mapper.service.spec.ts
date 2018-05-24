@@ -1,11 +1,9 @@
 /* tslint:disable:no-unused-variable */
-import { Expect, Test, TestFixture, TestCase, SpyOn, Setup, Teardown } from 'alsatian';
-import { Observable } from 'rxjs';
-
-import { MapperService } from './mapper.service';
-import { mappable, getMappableProperties } from './mappable.decorator';
+import { Test, TestCase, TestFixture } from 'alsatian';
+import { Assert, MatchMode } from 'alsatian-fluent-assertions';
 import * as vm from '../spec-lib/view-models';
 import { IConfig } from './i';
+import { MapperService } from './mapper.service';
 
 @TestFixture("MapperService constructor")
 export class MapperServiceConstructorTests {
@@ -15,21 +13,22 @@ export class MapperServiceConstructorTests {
             models: vm
         };
         let ms = new MapperService(config, console);
-        Expect(ms).not.toBe(null);
+        Assert(ms).not.isNull();
     }
 
     @Test("should permit empty constructor")
     public shouldPermitEmptyConstructor() {
         let ms = new MapperService();
-        Expect(ms["config"]).toEqual({});
-        Expect(ms["log"]).toBe(console);
+        const a = Assert(ms);
+        a.has(<any>"config").that.deeplyEquals({});
+        a.has(<any>"log").that.deeplyEquals(console);
     }
 
     @Test('should permit no config values (no throws).')
     public shouldPermitEmptyConfig(): void {
         let ms = new MapperService({}, console);
-        Expect(ms["log"]).toBeDefined();
-        Expect(ms["models"]).toBeTruthy();
+        Assert(ms["log"]).isDefined();
+        Assert(ms["models"]).isTruthy();
     }
 
     @TestCase({}, false)
@@ -43,7 +42,7 @@ export class MapperServiceConstructorTests {
             }
         }
         let m = new MapperService2(config, console);
-        Expect(called).toBe(shouldCall);
+        Assert(called).equals(shouldCall);
     }
 }
 
@@ -62,12 +61,8 @@ export class MapperService_MethodTests {
     public throwsOnlyWhenInvalid(testClass: new () => any, throws: boolean): void {
         let mapper = new MapperService({}, console);
         mapper["models"] = { "ValidateTestClass": vm.ValidateTestClass, "Mine2": testClass };
-        try {
-            mapper.validate();
-            Expect(false).toBe(throws);
-        } catch(ex) {
-            Expect(true).toBe(throws);
-        }
+
+        Assert(() => mapper.validate()).maybe(throws).throws();
     }
 
     @Test('map should map primitives.')
@@ -86,10 +81,13 @@ export class MapperService_MethodTests {
         };
         let mapper = new MapperService({}, this.dummyConsole);
         let result = mapper.map(vm.Mine, json);
-        Expect(result.Id).toBe(3);
-        Expect(result.One).toBe(json.One);
-        Expect(result.Two).toBe(json.Two);
-        Expect(result.Three).toBe(json.Three);
+        Assert(result)
+            .has({
+                Id: 3,
+                One: json.One,
+                Two: json.Two,
+                Three: json.Three
+            }, MatchMode.literal);
     }
 
     @TestCase(false, true, true)
@@ -116,7 +114,7 @@ export class MapperService_MethodTests {
             Two: 6.53, // ignored
         };
         var result = mapper.map(vm.MineMinusTwo, json, warnPref);
-        Expect(warned).toBe(warnResult);
+        Assert(warned).equals(warnResult);
     }
 
     @TestCase(false, true, true)
@@ -143,7 +141,7 @@ export class MapperService_MethodTests {
             Two: 6.53, // ignored
         };
         var result = mapper.mapArray(vm.MineMinusTwo, [json], warnPref);
-        Expect(warned).toBe(warnResult);
+        Assert(warned).equals(warnResult);
     }
 
     @TestCase(null)
@@ -152,22 +150,18 @@ export class MapperService_MethodTests {
     public map_NullYieldsNull(input: any) {
         let mapper = new MapperService({}, this.dummyConsole);
         let result = mapper.map(vm.Mine, input);
-        Expect(result).toBe(input);
+        Assert(result).equals(input);
     }
 
     @Test("should error when nested model missing.")
     public map_errorsOnMissingModel() {
-        try {
-            var json = {
-                Id: 3,
-                Prop: "something"
-            };
-            let mapper = new MapperService({}, this.dummyConsole);
-            var result = mapper.map(vm.NestedTypo, json);
-            Expect("").toBe("Should have thrown error before here");
-        } catch(err) {
-            Expect(err).toBeTruthy();
-        }
+        var json = {
+            Id: 3,
+            Prop: "something"
+        };
+        let mapper = new MapperService({}, this.dummyConsole);
+        Assert(() => mapper.map(vm.NestedTypo, json))
+            .throws();
     }
 
     @Test("should map nested types.")
@@ -181,11 +175,15 @@ export class MapperService_MethodTests {
         };
         let mapper = new MapperService({ models: vm }, this.dummyConsole);
         var result = mapper.map(vm.Nested_Mine, json);
-        Expect(result.Id).toBe(3);
-        Expect(result.One).toBe(json.One);
-        Expect(result.Prop).toBeDefined();
-        Expect(result.Prop.Another).toBe(json.Prop.Another);
-        Expect(result.Prop.Computed).toBe("for you and me");
+        Assert(result)
+            .hasAsserts({
+                Id: 3,
+                One: a => a.equals(json.One),
+                Prop: {
+                    Another: json.Prop.Another,
+                    Computed: "for you and me"
+                }
+            });
     }
 
     @Test("should map nested reference types.")
@@ -196,10 +194,14 @@ export class MapperService_MethodTests {
         };
         let mapper = new MapperService({ models: vm }, this.dummyConsole);
         var result = mapper.map(vm.ByRefNested, json);
-        Expect(result.Id).toBe(3);
-        Expect(result.Two).toBeDefined();
-        Expect(result.Two.Name).toBe(json.Two.Name);
-        Expect(result.Two.Calculated).toBe("something else");
+        Assert(result)
+            .has({
+                Id: 3,
+                Two: {
+                    Name: json.Two.Name,
+                    Calculated: "something else"
+                }
+            });
     }
 
     @Test("should map nested array reference types.")
@@ -210,10 +212,16 @@ export class MapperService_MethodTests {
         };
         let mapper = new MapperService({ models: vm }, this.dummyConsole);
         var result = mapper.map(vm.ByRefNestedArray, json);
-        Expect(result.Id).toBe(3);
-        Expect(result.Two).toBeDefined();
-        Expect(result.Two[0].Name).toBe(json.Two[0].Name);
-        Expect(result.Two[0].Calculated).toBe("something else");
+        Assert(result)
+            .has({
+                Id: 3,
+                Two: [
+                    {
+                        Name: json.Two[0].Name,
+                        Calculated: "something else"
+                    }
+                ]
+            });
     }
 
     @Test("should map nested array types.")
@@ -229,12 +237,15 @@ export class MapperService_MethodTests {
         };
         let mapper = new MapperService({ models: vm }, this.dummyConsole);
         var result = mapper.map(vm.NestedArrayTypes_Mine, json);
-        Expect(result.Id).toBe(3);
-        Expect(result.One).toBe(json.One);
-        Expect(result.Props).toBeDefined();
-        Expect(result.Props.length).toBe(2);
-        Expect(result.Props[0].Computed).toBe("for you and me");
-        Expect(result.Props[1].Computed).toBe("for me and me");
+        Assert(result)
+            .has({
+                Id: 3,
+                One: json.One,
+                Props: [
+                    { Computed: "for you and me" },
+                    { Computed: "for me and me" }
+                ]
+            });
     }
 
     @TestCase(vm.ByRefNestedArray, "Two", { Two: {} }, false)
@@ -251,18 +262,21 @@ export class MapperService_MethodTests {
     public iterable_trueIffIterable(t: { new(): any }, prop: string, obj: any, expected: boolean) {
         let mapper = new MapperService();
         let inst = new t();
-        Expect(mapper["iterable"](inst, obj, prop)).toBe(expected);
+        Assert(mapper["iterable"](inst, obj, prop)).equals(expected);
     }
 
     @Test("map should ignore errors in attribute.")
     public map_TypoedAttribIgnored() {
         let mapper = new MapperService();
-        Expect(mapper.map(vm.WeirdModel, { blarg: true })["blarg"]).not.toBeDefined();
+        Assert(mapper.map(vm.WeirdModel, { blarg: true }))
+            .not.has((o: any) => o.blarg);
     }
 
     @Test("map should ignore unwritable properties.")
     public map_UnwritableIgnored() {
-        let mapper = new MapperService();
-        Expect(mapper.map(vm.Unwritable, { unwritableProp: "change" }).unwritableProp).toBe("can't change this");
+        const mapper = new MapperService();
+        const result = mapper.map(vm.Unwritable, { unwritableProp: "change" });
+        Assert(result)
+            .has(o => o.unwritableProp).that.equals("can't change this");
     }
 }

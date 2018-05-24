@@ -1,11 +1,8 @@
 /* tslint:disable:no-unused-variable */
-import { Expect, Test, TestFixture, TestCase, SpyOn, Setup, Teardown } from 'alsatian';
-import { Observable } from 'rxjs';
-
-import { MapperService } from './mapper.service';
-import { mappable, getMappableProperties } from './mappable.decorator';
+import { Test, TestCase, TestFixture } from 'alsatian';
+import { Assert, MatchMode } from "alsatian-fluent-assertions";
 import * as vm from '../spec-lib/mappable.decorator.test-vms';
-import { IConfig } from './i';
+import { getMappableProperties, mappable } from './mappable.decorator';
 
 @TestFixture("Mappable decorator tests")
 export class MappableDecoratorTests {
@@ -21,9 +18,9 @@ export class MappableDecoratorTests {
                 Two: ByRefOutOfOrder = null;
             }
 
-            Expect(expectable).toBe(expected);
+            Assert(expectable).equals(expected);
         } catch(ex) {
-            Expect(ex.message.substr(0, expected.length)).toBe(expected);
+            Assert(ex).has({ message: new RegExp(expected) });
         }
     }
 }
@@ -37,24 +34,28 @@ export class GetMappablePropertiesTests {
     @Test("should return a dictionary of mappables.")
     public returnDict(type: any, entries: number) {
         let dict = getMappableProperties(type);
-        Expect(dict).toBeDefined();
-        Expect(Object.keys(dict).length).toBe(entries);
+        Assert(dict).isDefined();
+        Assert(Object.keys(dict).length).equals(entries);
     }
 
     @Test("should not return other class's mappables.")
     public onlyOwnMappables() {
         let dict = getMappableProperties(vm.OnlyMineB);
-        Expect(dict).toBeDefined();
-        Expect(Object.keys(dict).length).toBe(1);
-        Expect(dict["Prop1"]).toBe(vm.OnlyMineA);
+        Assert(dict)
+            .isDefined()
+            .has({ Prop1: vm.OnlyMineA }, MatchMode.literal);
+        Assert(Object.keys(dict).length).equals(1);
     }
 
     @Test("should return dict with prop names as keys, and model constructables as values")
     public validMappableDictFormat() {
         let dict = getMappableProperties(vm.MineWithTwo);
-        Expect(dict).toBeDefined();
-        Expect(Object.keys(dict).length).toBe(2);
-        Expect(dict["Prop1"]).toBe(vm.Mine);
-        Expect(dict["Prop2"]).toBe(vm.UnheardOf);
+        Assert(dict)
+            .isDefined()
+            .has({
+                Prop1: vm.Mine,
+                Prop2: vm.UnheardOf
+            },  MatchMode.literal)
+        Assert(Object.keys(dict).length).equals(2);
     }
 }
