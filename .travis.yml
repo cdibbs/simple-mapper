@@ -3,7 +3,7 @@ sudo: true
 dist: trusty
 
 node_js:
-- '6.9.4'
+- '8'
 - '10'
 
 script: 
