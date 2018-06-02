@@ -1,6 +1,6 @@
 {
   "name": "simple-mapper",
-  "version": "2.1.4",
+  "version": "2.2.0",
   "description": "A convention-based mapping library for nodejs and the browser.",
   "keywords": [],
   "contributors": [],
