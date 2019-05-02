@@ -38,7 +38,7 @@
   "dependencies": {},
   "devDependencies": {
     "@compodoc/compodoc": "^1.1.2",
-    "@types/node": "^10.0.3",
+    "@types/node": "^11.13.9",
     "alsatian": "^2.2.1",
     "alsatian-fluent-assertions": "^1.0.0-alpha018",
     "codecov": "^3.0.0",
